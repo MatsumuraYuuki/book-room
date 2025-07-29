@@ -17,7 +17,9 @@ services:
   rails:
     build:
       context: ./rails
-      dockerfile: Dockerfile.dev  # 開発用Dockerfileを指定
+    environment:
+      RAILS_ENV: development  # 復活     
+      # 開発用Dockerfileを指定
     command: bash -c "bundle exec rails s -b '0.0.0.0'"
     volumes:
       - ./rails:/rails
@@ -27,6 +29,20 @@ services:
       - db
     tty: true
     stdin_open: true
+
+  next:
+        build:
+          dockerfile: ./next/Dockerfile
+        command: npm run dev  
+        tty: true
+        stdin_open: true
+        volumes:
+          - ./next:/app
+        ports:
+          - "8000:3000"
+        depends_on:
+          - rails  # ← SSRでRails APIを使うため必要。必ずrailsが起動してからNext.jsを起動する          
+
 
 volumes:
   mysql_data:

@@ -2,7 +2,7 @@
 set -e
 
 
-rm -f /book-room/tmp/pids/server.pid
+rm -f /rails/tmp/pids/server.pid
 
 
 exec "$@"

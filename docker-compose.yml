@@ -17,11 +17,10 @@ services:
   rails:
     build:
       context: ./rails
-    environment:
-      RAILS_ENV: development
+      dockerfile: Dockerfile.dev  # 開発用Dockerfileを指定
     command: bash -c "bundle exec rails s -b '0.0.0.0'"
     volumes:
-      - ./rails:/book-room
+      - ./rails:/rails
     ports:
       - "3000:3000"
     depends_on:

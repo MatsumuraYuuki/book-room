@@ -8,7 +8,7 @@ gem "mysql2", "~> 0.5"
 gem "puma", "~> 6.0" # ← 5.0から6.0に変更
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
-#
+
 # cors設定を管理する
 gem "rack-cors"
 
@@ -23,6 +23,9 @@ gem "devise-i18n"
 
 # ユーザーのトークン認証を提供する
 gem "devise_token_auth"
+
+# レスポンスJSONを制御する
+gem "active_model_serializers"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"

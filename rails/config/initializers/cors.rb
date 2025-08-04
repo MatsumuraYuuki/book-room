@@ -10,7 +10,6 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
     # rails/config/settings/いかに定義
     origins Settings.front_domain
 
-
     resource "*",
              headers: :any,
              methods: [:get, :post, :put, :patch, :delete, :options, :head]

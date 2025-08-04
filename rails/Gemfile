@@ -12,19 +12,17 @@ gem "puma", "~> 6.0" # ← 5.0から6.0に変更
 # cors設定を管理する
 gem "rack-cors"
 
-# # 環境毎の設定管理を行う
-# gem "config"
+# 環境毎の設定管理を行う
+gem "config"
 
+# ユーザー認証を提供する
+gem "devise"
 
-# # ユーザー認証を提供する
-# gem "devise"
+# devise を日本語化する
+gem "devise-i18n"
 
-# # devise を日本語化する
-# gem "devise-i18n"
-
-# # ユーザーのトークン認証を提供する
-# gem "devise_token_auth"
-
+# ユーザーのトークン認証を提供する
+gem "devise_token_auth"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -41,8 +39,10 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-
 group :development, :test do
+  # 開発環境でメール送信をテストする
+  gem "letter_opener_web"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 

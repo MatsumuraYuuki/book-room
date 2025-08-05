@@ -16,6 +16,9 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y curl default-mysql-client libjemalloc2 libvips && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
+# RUN apt-get update -qq && apt-get install -y 「build-essential」(Dockerfile.devではdeviseのbcryptインストール時に必要になった
+
+
 # Set production environment
 ENV RAILS_ENV="production" \
     BUNDLE_DEPLOYMENT="1" \

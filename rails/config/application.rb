@@ -40,5 +40,9 @@ module BookRoom
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Rails アプリ全体の言語を日本語に設定
+    # これを設定することで、例えば devise の認証メールを生成するときに、上記で生成したdevise.views.ja.ymlを参照してくれる
+    config.i18n.default_locale = :ja
   end
 end

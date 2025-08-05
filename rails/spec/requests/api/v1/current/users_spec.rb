@@ -14,7 +14,7 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
       it "正常にレコードを取得できる" do
         subject
 
-        res = JSON.parse(response.body)
+        res = response.parsed_body
         # v1/current/users_controller.rbのshowアクションで render json: current_userが帰ってくる
         expect(res.keys).to eq ["id", "name", "email"]
         expect(response).to have_http_status(:ok)
@@ -26,11 +26,10 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
 
       it "unauthorized エラーが返る" do
         subject
-        res = JSON.parse(response.body)
+        res = response.parsed_body
         expect(res["errors"]).to eq ["ログインもしくはアカウント登録してください。"]
         expect(response).to have_http_status(:unauthorized)
       end
     end
-
   end
 end

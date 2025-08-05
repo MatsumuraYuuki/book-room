@@ -13,6 +13,3 @@ RSpec.describe User, type: :model do
     end
   end
 end
-
-
-「ログインユーザー取得アクションのリクエストスペック実装」のところまでやった

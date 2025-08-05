@@ -41,6 +41,7 @@ services:
     stdin_open: true
     volumes:
       - ./next:/app
+      - bundle_cache:/usr/local/bundle  # ← この行を追加
     ports:
       - "8000:3000"
     depends_on:
@@ -48,3 +49,4 @@ services:
 
 volumes:
   mysql_data:
+  bundle_cache:  # ← この行を追加

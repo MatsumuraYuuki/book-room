@@ -23,9 +23,9 @@ services:
       BUNDLE_DEPLOYMENT: "" # ← 追加：空文字で上書き
       BUNDLE_FROZEN: "false" # ← 追加：frozen mode無効化
     command: bash -c "bundle exec rails s -b '0.0.0.0'"
-
     volumes:
       - ./rails:/rails
+      - bundle_cache:/usr/local/bundle # ← gemの永続化
     ports:
       - "3000:3000"
     depends_on:
@@ -48,3 +48,4 @@ services:
 
 volumes:
   mysql_data:
+  bundle_cache: # ← gemの永続化

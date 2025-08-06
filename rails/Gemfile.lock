@@ -89,6 +89,9 @@ GEM
     brakeman (7.1.0)
       racc
     builder (3.3.0)
+    bullet (8.0.8)
+      activesupport (>= 3.0.0)
+      uniform_notifier (~> 1.11)
     byebug (12.0.0)
     case_transform (0.2)
       activesupport
@@ -121,6 +124,8 @@ GEM
       rails (>= 4.2.0, < 8.1)
     diff-lcs (1.6.2)
     drb (2.2.3)
+    enum_help (0.0.19)
+      activesupport (>= 3.0.0)
     erb (5.0.2)
     erubi (1.13.1)
     factory_bot (6.5.4)
@@ -141,6 +146,18 @@ GEM
       reline (>= 0.4.2)
     json (2.13.1)
     jsonapi-renderer (0.2.2)
+    kaminari (1.2.2)
+      activesupport (>= 4.1.0)
+      kaminari-actionview (= 1.2.2)
+      kaminari-activerecord (= 1.2.2)
+      kaminari-core (= 1.2.2)
+    kaminari-actionview (1.2.2)
+      actionview
+      kaminari-core (= 1.2.2)
+    kaminari-activerecord (1.2.2)
+      activerecord
+      kaminari-core (= 1.2.2)
+    kaminari-core (1.2.2)
     language_server-protocol (3.17.0.5)
     launchy (3.1.1)
       addressable (~> 2.8)
@@ -328,6 +345,7 @@ GEM
     unicode-display_width (3.1.4)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
+    uniform_notifier (1.17.0)
     useragent (0.16.11)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -345,13 +363,16 @@ DEPENDENCIES
   active_model_serializers
   bootsnap
   brakeman
+  bullet
   config
   debug
   devise
   devise-i18n
   devise_token_auth
+  enum_help
   factory_bot_rails
   faker
+  kaminari
   letter_opener_web
   mysql2 (~> 0.5)
   pry-byebug
@@ -360,6 +381,7 @@ DEPENDENCIES
   puma (~> 6.0)
   rack-cors
   rails (~> 7.2.2, >= 7.2.2.1)
+  rails-i18n
   rspec-rails
   rubocop-faker
   rubocop-rails

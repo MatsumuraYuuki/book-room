@@ -1,8 +1,13 @@
 class ArticleSerializer < ActiveModel::Serializer
-  attributes :id, :title, :content, :created_at, :from_today
+  attributes :id, :title, :content, :status, :created_at, :from_today
 
   # serializers/user_serializer.rbにて:nameだけ返すようにしてある
   belongs_to :user, serializer: UserSerializer
+
+  # rails/config/locales/ja.ymlで定義した日本語翻訳を返す
+  def status
+    object.status_i18n
+  end
 
   def created_at
     object.created_at.strftime("%Y/%m/%d")

@@ -24,8 +24,14 @@ gem "devise-i18n"
 # ユーザーのトークン認証を提供する
 gem "devise_token_auth"
 
+# ページネーション機能を提供する
+gem "kaminari"
+
 # レスポンスJSONを制御する
 gem "active_model_serializers"
+
+# メッセージを日本語化
+gem "rails-i18n"
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -43,6 +49,9 @@ gem "bootsnap", require: false
 # gem "image_processing", "~> 1.2"
 
 group :development, :test do
+  # N+1発生時にアラートを表示する
+  gem "bullet"
+
   # 開発環境でメール送信をテストする
   gem "letter_opener_web"
 

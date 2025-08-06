@@ -14,5 +14,5 @@ class Article < ApplicationRecord
       if unsaved? && user.articles.unsaved.present?
         raise StandardError, "未保存の記事は複数保有できません"
       end
-    end  
+    end
 end

@@ -3,6 +3,6 @@ FactoryBot.define do
     user
     title { Faker::Lorem.sentence }
     content { Faker::Lorem.paragraph }
-    status { :published }    
+    status { :published }
   end
 end

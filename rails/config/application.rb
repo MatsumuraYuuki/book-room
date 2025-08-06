@@ -45,6 +45,5 @@ module BookRoom
     # これを設定することで、例えば devise の認証メールを生成するときに、上記で生成したdevise.views.ja.ymlを参照してくれる
     config.i18n.default_locale = :ja
     config.i18n.load_path += Dir[Rails.root.join("config/locales/**/*.yml").to_s]
-
   end
 end

@@ -1,3 +1,4 @@
+// fetcherはGETリクエスト専用
 import axios, { AxiosResponse, AxiosError } from 'axios';
 
 export const fetcher = (url: string) =>

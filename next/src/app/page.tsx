@@ -1,21 +1,15 @@
-'use client'
-
-import useSWR from 'swr'
-import { fetcher } from '@/utils'
-
-export default function Page() {
-  const url = 'http://localhost:3000/api/v1/health_check'
-  // 第一引数のurlを、第二引数のfetcherに渡してfetcherを動作
-  const { data, error } = useSWR(url, fetcher)
-
-  //レスポンスが正常ならその結果をdataに、エラーが発生したらその内容をerrorに代入
-  if (error) return <div>An error has occurred.</div>
-  if (!data) return <div>Loading...</div>
-
+// src/app/page.tsx
+export default function HomePage() {
   return (
-    <>
-      <div>Rails疎通確認</div>
-      <div>レスポンスメッセージ: {data.message}</div>
-    </>    
+    <div className="bg-blue-50 min-h-screen">
+      <div className="container mx-auto max-w-4xl pt-6 px-4">
+        <h1 className="text-3xl font-bold text-center">Welcome to Reading App</h1>
+        <p className="text-center mt-4">
+          <a href="/articles" className="text-blue-600 hover:text-blue-800">
+            記事一覧を見る
+          </a>
+        </p>
+      </div>
+    </div>
   );
 }

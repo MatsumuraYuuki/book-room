@@ -1,0 +1,2 @@
+# この値は、Settings.front_domainという形で取り出すことができます。
+front_domain: "http://localhost:8000"

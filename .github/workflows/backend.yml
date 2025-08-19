@@ -1,0 +1,86 @@
+# テスト(rspec)、コードルール(rubocop)のチェックを行う
+name: Run RSpec and RuboCop
+# いつ実行するか
+# feature と develop ブランチへの push 時
+on:
+  push:
+    branches:
+      - develop
+      - 'feature/**'
+  pull_request:
+    branches:
+      - develop
+
+# 何するか
+jobs:
+  # 処理① rspec がオールグリーンであることをチェック
+  rspec:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20 # テスト時間最大20分まで
+    defaults:
+      run:
+        working-directory: rails  #このジョブ内の全ての run コマンドは rails ディレクトリで実行する
+    services: #GitHub Actions VM内でMySQLコンテナを起動(Docker Composeとは別)
+      mysql:
+        image: mysql:8.0.40
+        options: >-
+          --health-cmd "mysqladmin ping --silent"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 10
+        ports:
+          - 3306:3306           # VMの3306ポートにバインド
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_ROOT_HOST: "%" # 任意のホストからのアクセスを許可(具体的には同じVM内のRailsアプリを想定)
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+      - name: Bundlerとgemをインストール
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
+      - name: データベース設定ファイルをコピー #ローカルのdatabase.yml.ciから VM内のdatabase.ymlへコピー
+        run: cp config/database.yml.ci config/database.yml
+      - name: データベースの状態確認 #MySQLサービスの起動完了を待っている
+        run: |
+          for i in {1..10}; do
+            mysqladmin ping -h 127.0.0.1 --silent && echo "MySQL is up" && break
+            echo "Waiting for MySQL..."
+            sleep 5
+          done || { echo "MySQL did not start"; exit 1; }
+      - name: データベースを作成およびマイグレーション
+        run: |
+          bundle exec rake db:create RAILS_ENV=test --trace
+          bundle exec rake db:migrate RAILS_ENV=test --trace
+      - name: RSpecを実行
+        run: bundle exec rspec
+        env:
+          RAILS_ENV: test
+
+  # 処理② rubocop のルール違反がないことをチェック
+  rubocop:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: rails  #このジョブ内の全ての run コマンドは rails ディレクトリで実行する
+    steps:
+      - name: コードをチェックアウト #Ubuntu VMがGitHubからコードをダウンロード
+        uses: actions/checkout@v4
+      - name: Set up Ruby #Ubuntu VMの中でRubyをインストールしてる
+        uses: ruby/setup-ruby@v1 
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+      - name: Bundlerとgemをインストール  #Ubuntu VMの中でRubyをインストールしてる
+        run: |
+          gem install bundler
+          bundle install --jobs 4 --retry 3 --path vendor/bundle
+      - name: RuboCopを実行
+        run: bundle exec rubocop

@@ -1,5 +1,9 @@
 FROM ruby:3.2.2
-RUN apt-get update -qq && apt-get install -y vim
+RUN apt-get update -qq && apt-get install -y vim build-essential
+
+# 開発環境用の環境変数設定＊エラー対応
+ENV RAILS_ENV=development
+
 
 # Node.jsのインストール
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - \
@@ -14,6 +18,7 @@ COPY Gemfile /rails/Gemfile
 COPY Gemfile.lock /rails/Gemfile.lock
 RUN gem update --system
 RUN bundle update --bundler
+
 RUN bundle install
 COPY . /rails
 COPY entrypoint.sh /usr/bin/

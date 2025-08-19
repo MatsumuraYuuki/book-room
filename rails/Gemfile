@@ -9,6 +9,33 @@ gem "puma", "~> 6.0" # ← 5.0から6.0に変更
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 # gem "jbuilder"
 
+# cors設定を管理する
+gem "rack-cors"
+
+# 環境毎の設定管理を行う
+gem "config"
+
+# ユーザー認証を提供する
+gem "devise"
+
+# devise を日本語化する
+gem "devise-i18n"
+
+# ユーザーのトークン認証を提供する
+gem "devise_token_auth"
+
+# enum を日本語化する
+gem "enum_help"
+
+# ページネーション機能を提供する
+gem "kaminari"
+
+# レスポンスJSONを制御する
+gem "active_model_serializers"
+
+# メッセージを日本語化
+gem "rails-i18n"
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 
@@ -24,10 +51,13 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin Ajax possible
-# gem "rack-cors"
-
 group :development, :test do
+  # N+1発生時にアラートを表示する
+  gem "bullet"
+
+  # 開発環境でメール送信をテストする
+  gem "letter_opener_web"
+
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[mri windows], require: "debug/prelude"
 
@@ -44,6 +74,10 @@ group :development, :test do
 
   # テストフレームワーク rspec を導入する
   gem "rspec-rails"
+
+  # テスト用データを作成する
+  gem "factory_bot_rails"
+  gem "faker"
 
   # rubocop を使えるようにする。
   gem "rubocop-faker"

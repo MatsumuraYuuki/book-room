@@ -1,3 +1,4 @@
+# api/v1/current/以下のファイルはログインしている時のみ動作するファイル
 class Api::V1::Current::ArticlesController < Api::V1::BaseController
   before_action :authenticate_user!
 

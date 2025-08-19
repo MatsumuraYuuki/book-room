@@ -25,12 +25,9 @@ export default function ArticlesPage() {
     <div className="bg-blue-50 min-h-screen flex flex-col">
       <div className="container mx-auto max-w-4xl pt-6 px-4 flex-1 flex flex-col">
         {/* 記事一覧 */}
-        <div>
+        <div className="flex-1">
           <ArticleList articles={articles} />
         </div>
-
-           {/* スペーサー - 残りの空間を占有 */}
-        <div className="flex-1"></div>
 
         {/* ページネーション - 最下部に固定 */}
         <div className="py-8">

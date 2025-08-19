@@ -1,4 +1,4 @@
-// next/src/app/sign-in/page.tsx
+// next/src/app/sign-up/page.tsx
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -8,17 +8,22 @@ import { useEffect } from 'react';
 import Link from 'next/link';
 
 interface FormData {
+  name: string;
   email: string;
   password: string;
+  passwordConfirmation: string;
 }
 
-export default function SignInPage() {
+export default function SignUpPage() {
   // 認証情報を取得
-  const { signIn, loading, error, isLoggedIn } = useAuth();
+  const { signUp, loading, error, isLoggedIn } = useAuth();
   const router = useRouter();
 
   // フォームの設定
-  const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
+
+  // パスワード確認用
+  const password = watch('password');
 
   // 既にログインしている場合はホームに移動
   useEffect(() => {
@@ -29,18 +34,40 @@ export default function SignInPage() {
 
   // フォームが送信された時の処理
   const onSubmit = async (data: FormData) => {
-    const success = await signIn(data.email, data.password);
+    const success = await signUp(data.name, data.email, data.password);
     if (success) {
-      router.push('/'); // サインイン成功時はホームに移動
+      router.push('/'); // サインアップ成功時はホームに移動
     }
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
-        <h1 className="text-2xl font-bold text-center mb-6">サインイン</h1>
+        <h1 className="text-2xl font-bold text-center mb-6">サインアップ</h1>
         
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* ユーザー名入力 */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              ユーザー名
+            </label>
+            <input
+              {...register('name', {
+                required: 'ユーザー名を入力してください',
+                minLength: {
+                  value: 2,
+                  message: 'ユーザー名は2文字以上で入力してください'
+                }
+              })}
+              type="text"
+              className="w-full p-3 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+              placeholder="ユーザー名"
+            />
+            {errors.name && (
+              <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+            )}
+          </div>
+
           {/* メールアドレス入力 */}
           <div>
             <label className="block text-sm font-medium mb-1">
@@ -85,6 +112,26 @@ export default function SignInPage() {
             )}
           </div>
 
+          {/* パスワード確認入力 */}
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              パスワード確認
+            </label>
+            <input
+              {...register('passwordConfirmation', {
+                required: 'パスワード確認を入力してください',
+                validate: (value) => 
+                  value === password || 'パスワードが一致しません'
+              })}
+              type="password"
+              className="w-full p-3 border border-gray-300 rounded focus:border-blue-500 focus:outline-none"
+              placeholder="パスワード確認"
+            />
+            {errors.passwordConfirmation && (
+              <p className="text-red-500 text-sm mt-1">{errors.passwordConfirmation.message}</p>
+            )}
+          </div>
+
           {/* エラーメッセージ表示 */}
           {error && (
             <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
@@ -92,22 +139,22 @@ export default function SignInPage() {
             </div>
           )}
 
-          {/* サインインボタン */}
+          {/* サインアップボタン */}
           <button
             type="submit"
             disabled={loading}
             className="w-full bg-blue-500 text-white p-3 rounded hover:bg-blue-600 disabled:bg-gray-400"
           >
-            {loading ? 'サインイン中...' : 'サインイン'}
+            {loading ? 'サインアップ中...' : 'サインアップ'}
           </button>
         </form>
 
-        {/* サインアップリンク */}
+        {/* サインインリンク */}
         <div className="mt-6 text-center">
           <p className="text-gray-600">
-            アカウントをお持ちでない方は{' '}
-            <Link href="/sign-up" className="text-blue-500 hover:text-blue-700">
-              サインアップ
+            既にアカウントをお持ちの方は{' '}
+            <Link href="/sign-in" className="text-blue-500 hover:text-blue-700">
+              サインイン
             </Link>
           </p>
         </div>

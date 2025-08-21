@@ -1,15 +1,24 @@
-// src/app/page.tsx
+'use client';
+
+import { useAuth } from '@/contexts/AuthContext';
+import { WelcomePage } from '@/components/WelcomePage';
+import { DashboardPage } from '@/components/DashboardPage';
+
 export default function HomePage() {
-  return (
-    <div className="bg-blue-50 min-h-screen">
-      <div className="container mx-auto max-w-4xl pt-6 px-4">
-        <h1 className="text-3xl font-bold text-center">Welcome to Reading App</h1>
-        <p className="text-center mt-4">
-          <a href="/articles" className="text-blue-600 hover:text-blue-800">
-            記事一覧を見る
-          </a>
-        </p>
+  const { user, loading } = useAuth(); // loading を使用
+  
+  console.log('user:', user); // コンソールで確認
+  console.log('loading:', loading); // コンソールで確認
+
+  // 認証状態の確認中（ローディング中）
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>読み込み中...</p>
       </div>
-    </div>
-  );
+    );
+  }
+
+  // 認証状態に応じてコンポーネントを切り替え
+  return user ? <DashboardPage /> : <WelcomePage />;
 }

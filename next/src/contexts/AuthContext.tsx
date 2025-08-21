@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 手紙を書くための材料（状態管理）useStateが値を変更する道具
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // リロードまたはブラウザを閉じて再度開き、'user'がローカルストレージには残っているがstateはクリアされてしまった時に使われる
@@ -179,6 +179,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(savedUser);
       setIsLoggedIn(true);
     }
+    setLoading(false);
   }, []);
 
   const guestSignIn = async (): Promise<boolean> => {

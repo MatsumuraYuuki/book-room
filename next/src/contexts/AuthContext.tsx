@@ -18,6 +18,7 @@ interface AuthContextType {
   error: string | null;        // エラーメッセージ
   // signInは関数である。Promiseを使い「待機可能な型」を定義する（実際に待たせる処理をするのはawait演算子）
   signIn: (email: string, password: string) => Promise<boolean>;
+  guestSignIn: () => Promise<boolean>; // ゲストログイン用
   signUp: (name: string, email: string, password: string) => Promise<boolean>; // 追加
   signOut: () => void;         // void「何も返さない」という意味の型
 }
@@ -31,13 +32,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   // 手紙を書くための材料（状態管理）useStateが値を変更する道具
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   // リロードまたはブラウザを閉じて再度開き、'user'がローカルストレージには残っているがstateはクリアされてしまった時に使われる
   const getUserFromStorage = () => {
     if (typeof window === 'undefined') return null;
-    
+
     const savedUser = localStorage.getItem('user');
     if (savedUser) {
       try {
@@ -80,15 +81,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // サインイン成功
         const userData = await response.json();
         const userInfo = userData.data;
-        
+
         // ステートを更新　アプリ全体でログインしたユーザーとして機能
         setUser(userInfo);
         setIsLoggedIn(true);
         setError(null);
-        
+
         // ローカルストレージに保存
         saveUserToStorage(userInfo);
-        
+
         setLoading(false);
         return true;
       } else {
@@ -111,7 +112,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setError(null);    // エラーをリセット
 
     try {
-      const requestBody = { 
+      const requestBody = {
         registration: {     // registrationラッパーを追加
           name,
           email,
@@ -119,10 +120,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
           password_confirmation: password
         }
       };
-      
+
       // デバッグ用ログ（本番では削除）
       console.log('送信するデータ:', requestBody);
-      
+
       // Next.jsがRailsに送信＋受信（DeviseTokenAuth用）
       const response = await fetch('http://localhost:3000/api/v1/auth', {
         method: 'POST',
@@ -136,15 +137,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         // サインアップ成功
         const userData = await response.json(); // 受信したレスポンスをJSON形式に変換
         const userInfo = userData.data; // DeviseTokenAuthのレスポンスのdataプロパティからユーザー情報を取得
-        
+
         // ステートを更新　アプリ全体でログインしたユーザーとして機能
         setUser(userInfo);
         setIsLoggedIn(true);
         setError(null);
-        
+
         // ローカルストレージに保存
         saveUserToStorage(userInfo);
-        
+
         setLoading(false);
         return true;
       } else {
@@ -178,7 +179,50 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(savedUser);
       setIsLoggedIn(true);
     }
+    setLoading(false);
   }, []);
+
+  const guestSignIn = async (): Promise<boolean> => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      // ゲストログインAPIを呼び出し
+      const response = await fetch('http://localhost:3000/api/v1/auth/guest_sign_in', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.ok) {
+        // ゲストログイン成功
+        const userData = await response.json();
+        const userInfo = userData.data;
+
+        // 通常ログインと同じ処理
+        setUser(userInfo);
+        setIsLoggedIn(true);
+        setError(null);
+
+        // ローカルストレージに保存
+        saveUserToStorage(userInfo);
+
+        setLoading(false);
+        return true;
+      } else {
+        setError('ゲストログインに失敗しました');
+        setLoading(false);
+        return false;
+      }
+    } catch (err) {
+      setError('ネットワークエラーが発生しました');
+      setLoading(false);
+      return false;
+    }
+  };
+
+
 
   // グローバルステートは何を渡している？→ 「このvalueを渡している」
   const value = {
@@ -188,7 +232,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     error,
     signIn,
     signUp, // 追加済み
-    signOut
+    signOut,
+    guestSignIn
   };
 
   return (

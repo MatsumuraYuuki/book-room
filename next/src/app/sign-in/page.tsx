@@ -14,7 +14,7 @@ interface FormData {
 
 export default function SignInPage() {
   // 認証情報を取得
-  const { signIn, loading, error, isLoggedIn } = useAuth();
+  const { signIn, guestSignIn, loading, error, isLoggedIn } = useAuth();
   const router = useRouter();
 
   // フォームの設定
@@ -32,6 +32,14 @@ export default function SignInPage() {
     const success = await signIn(data.email, data.password);
     if (success) {
       router.push('/'); // サインイン成功時はホームに移動
+    }
+  };
+   
+  // ゲストログインボタンが押された時の処理
+  const handleGuestSignIn = async () => {
+    const success = await guestSignIn();
+    if (success) {
+      router.push('/'); // ゲストログイン成功時はホームに移動
     }
   };
 
@@ -101,6 +109,28 @@ export default function SignInPage() {
             {loading ? 'サインイン中...' : 'サインイン'}
           </button>
         </form>
+
+
+        {/*  ゲストログインセクション */}
+        <div className="mt-6 pt-6 border-t border-gray-200">
+          <div className="text-center mb-3">
+            <p className="text-gray-600 text-sm">または</p>
+          </div>
+          
+          <button
+            onClick={handleGuestSignIn}
+            disabled={loading}
+            className="w-full bg-green-500 text-white p-3 rounded hover:bg-green-600 disabled:bg-gray-400 transition-colors"
+          >
+            {loading ? 'ログイン中...' : 'ゲストとしてログイン'}
+          </button>
+          
+          <p className="text-xs text-gray-500 text-center mt-2">
+            アカウント登録不要で機能をお試しいただけます
+          </p>
+        </div>
+
+
 
         {/* サインアップリンク */}
         <div className="mt-6 text-center">

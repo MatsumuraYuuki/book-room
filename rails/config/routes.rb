@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       mount_devise_token_auth_for "User", at: "auth", controllers: {
         registrations: "api/v1/auth/registrations",
       }
+
       namespace :current do
         resource :user, only: [:show]
         resources :articles, only: [:index, :show, :create, :update]
@@ -15,5 +16,9 @@ Rails.application.routes.draw do
 
       resources :articles, only: [:index, :show]
     end
+  end
+
+  devise_scope :api_v1_user do
+    post "api/v1/auth/guest_sign_in", to: "api/v1/auth/sessions#guest_sign_in"
   end
 end

@@ -20,5 +20,5 @@ Rails.application.routes.draw do
 
   devise_scope :api_v1_user do
     post "api/v1/auth/guest_sign_in", to: "api/v1/auth/sessions#guest_sign_in"
-  end 
+  end
 end

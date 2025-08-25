@@ -7,9 +7,6 @@ import { DashboardPage } from '@/components/DashboardPage';
 export default function HomePage() {
   const { user, loading } = useAuth(); // loading を使用
   
-  console.log('user:', user); // コンソールで確認
-  console.log('loading:', loading); // コンソールで確認
-
   // 認証状態の確認中（ローディング中）
   if (loading) {
     return (

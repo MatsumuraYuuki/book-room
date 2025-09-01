@@ -78,8 +78,6 @@ export const Header = () => {
           </div>
         </div>
       </header>
-      {/* ヘッダーの高さ分のスペーサー */}
-      <div className="h-16"></div>
     </>
   );
 };

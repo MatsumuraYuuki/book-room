@@ -1,5 +1,5 @@
 import ReactPaginate from 'react-paginate';
-import { MetaProps } from '@/types/article';
+import { MetaProps } from '@/types/common';
 
 type PaginationProps = {
   meta: MetaProps;

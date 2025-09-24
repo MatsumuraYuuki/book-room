@@ -5,7 +5,6 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { 
   ClockIcon,      // タイムライン用
-  PencilIcon,     // 記事を書く用
   MagnifyingGlassIcon  // 本を探す用
 } from '@heroicons/react/24/outline';
 
@@ -19,7 +18,6 @@ interface NavItem {
 // ナビゲーション項目の設定
 const navItems: NavItem[] = [
   { name: 'タイムライン', href: '/timeline', icon: ClockIcon },
-  { name: '記事を書く', href: '/write', icon: PencilIcon },
   { name: '本を探す', href: '/search', icon: MagnifyingGlassIcon },
 ];
 

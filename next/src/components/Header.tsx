@@ -34,9 +34,6 @@ export const Header = () => {
               <Link href="/" className="text-gray-600 hover:text-gray-900">
                 ホーム
               </Link>
-              <Link href="/articles" className="text-gray-600 hover:text-gray-900">
-                記事一覧
-              </Link>
               <Link href="/auth-test" className="text-gray-600 hover:text-gray-900">
                 認証テスト
               </Link>            

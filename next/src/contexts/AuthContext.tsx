@@ -121,9 +121,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         }
       };
 
-      // デバッグ用ログ（本番では削除）
-      console.log('送信するデータ:', requestBody);
-
       // Next.jsがRailsに送信＋受信（DeviseTokenAuth用）
       const response = await fetch('http://localhost:3000/api/v1/auth', {
         method: 'POST',

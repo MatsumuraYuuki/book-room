@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from '@/components/Header';
+import { Navigation } from '@/components/Navigation';
 import { AuthProvider } from '../contexts/AuthContext';
 
 const geistSans = localFont({
@@ -30,9 +31,20 @@ export default function RootLayout({
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* 全体をAuthProviderで囲み、ここにstateの状態を記憶しておくことでページ移動してもstateの再取得が可能になる */}
-        <AuthProvider>
-          <Header />
-          {children}
+       <AuthProvider>
+          <div className="min-h-screen bg-white">
+            <Header />
+            <Navigation />
+            
+            <main className="md:pl-64 flex flex-col min-h-screen pt-16">
+              <div className="flex-1 p-4 md:p-8">
+                {children}
+              </div>
+
+              {/* モバイル用の下部余白 */}
+              <div className="h-20 md:h-0"></div>
+            </main>
+          </div>
         </AuthProvider>
       </body>
     </html>

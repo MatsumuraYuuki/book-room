@@ -5,8 +5,6 @@ class User < ApplicationRecord
 
   include DeviseTokenAuth::Concerns::User
 
-  has_many :articles, dependent: :destroy
-
   # api/v1/auth/sessions_controller.rbで使用
   def self.guest
     find_or_create_by!(email: "guest@example.com") do |user|

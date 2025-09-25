@@ -10,14 +10,15 @@
     "format": "next lint --fix --dir src"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "axios": "^1.11.0",
     "camelcase-keys": "^9.0.0",
     "next": "14.2.30",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook-form": "^7.46.0",
     "react-paginate": "^8.3.0",
-    "swr": "^2.3.4",
-    "react-hook-form": "^7.46.0"
+    "swr": "^2.3.4"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -1,5 +1,6 @@
 # 自動生成されるものはチェック対象から除外する
 AllCops:
+  NewCops: enable  # この行を追加
   Exclude:
     - "node_modules/**/*" # rubocop config/default.yml
     - "vendor/**/*" # rubocop config/default.yml

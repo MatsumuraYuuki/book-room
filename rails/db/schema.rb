@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_09_24_105845) do
+ActiveRecord::Schema[7.2].define(version: 20_250_924_105_845) do
   create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "google_books_id", null: false
     t.string "title", null: false

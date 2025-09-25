@@ -13,7 +13,7 @@ class DropArticles < ActiveRecord::Migration[7.0]
       t.bigint :user_id, null: false
       t.timestamps
     end
-    
+
     add_index :articles, :user_id
     add_foreign_key :articles, :users
   end

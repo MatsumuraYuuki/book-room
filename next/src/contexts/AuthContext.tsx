@@ -24,7 +24,7 @@ interface AuthContextType {
 }
 
 // コンテキストを作成 「認証情報を入れる専用の箱」を作成
-// AuthContext.Providerはここで自動作成される
+// 専用コンポーネントで抽象化している。わかりやすく言えばcreateContextを使いやすくしている
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // AuthProviderは「箱に入れる手紙を作成・管理する」役割

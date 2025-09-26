@@ -1,7 +1,9 @@
 class User < ApplicationRecord
-  #  :confimrmable:ユーザー新規登録の際に何らかの認証操作を必須にする
-  devise :database_authenticatable, :registerable,
-         :recoverable, :rememberable, :validatable
+  devise :database_authenticatable,  # DBに保存されたパスワードで認証
+         :registerable,  # ユーザー登録機能
+         :recoverable,  #パスワードリセット機能
+         :rememberable, #ログイン情報を保存する機能
+         :validatable  #メールアドレスとパスワードのバリデーション
 
   include DeviseTokenAuth::Concerns::User
 

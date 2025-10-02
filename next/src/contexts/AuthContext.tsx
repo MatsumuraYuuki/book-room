@@ -3,33 +3,38 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-// ユーザーの型定義
+// この情報のみローカルストレージに保存される/saveUserToStorageでセットされる
 interface User {
   id: number;
   name: string;
   email: string;
 }
 
+
+
+// devise_token_authで認証トークンがレスポンスとして帰ってくると思うが、それはどのようにして管理される？編集このコードを見ると、認証トークンが全く管理されていません。これは重要な問題です。
+// この問題に当たって終わった！！！！！！！！！
+
+
+
+
 // 認証コンテキストの型定義
 interface AuthContextType {
   user: User | null;           // ユーザー情報（ログインしていない場合はnull）
-  isLoggedIn: boolean;         // ログイン状態
-  loading: boolean;            // 読み込み中かどうか
-  error: string | null;        // エラーメッセージ
-  // signInは関数である。Promiseを使い「待機可能な型」を定義する（実際に待たせる処理をするのはawait演算子）
+  isLoggedIn: boolean;
+  loading: boolean;
+  error: string | null;
+  // Promiseを使い「待機可能な型」を定義する（実際に待たせる処理をするのはawait演算子）
   signIn: (email: string, password: string) => Promise<boolean>;
-  guestSignIn: () => Promise<boolean>; // ゲストログイン用
-  signUp: (name: string, email: string, password: string) => Promise<boolean>; // 追加
+  guestSignIn: () => Promise<boolean>;
+  signUp: (name: string, email: string, password: string,) => Promise<boolean>;
   signOut: () => void;         // void「何も返さない」という意味の型
 }
 
-// コンテキストを作成 「認証情報を入れる専用の箱」を作成
 // 専用コンポーネントで抽象化している。わかりやすく言えばcreateContextを使いやすくしている
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// AuthProviderは「箱に入れる手紙を作成・管理する」役割
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
-  // 手紙を書くための材料（状態管理）useStateが値を変更する道具
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -37,9 +42,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   // リロードまたはブラウザを閉じて再度開き、'user'がローカルストレージには残っているがstateはクリアされてしまった時に使われる
   const getUserFromStorage = () => {
+    // windowオブジェクトはクライアント側にしかないがNext.jsではサーバー側で実行するためエラー。その対処
     if (typeof window === 'undefined') return null;
 
-    const savedUser = localStorage.getItem('user');
+    const savedUser = localStorage.getItem('user');  //.getItemはブラウザ備え付けの標準メソッド
     if (savedUser) {
       try {
         return JSON.parse(savedUser);

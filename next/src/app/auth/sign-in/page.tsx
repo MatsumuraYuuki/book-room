@@ -1,6 +1,5 @@
 // next/src/app/sign-in/page.tsx
 'use client';
-
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useRouter } from 'next/navigation';

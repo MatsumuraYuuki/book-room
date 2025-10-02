@@ -1,10 +1,10 @@
 // next/src/components/DashboardPage.tsx
 'use client';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore'
 
 export function DashboardPage() {
-  const { user } = useAuth();
+  const { user } = useAuthStore();
 
   return (
     <div className="max-w-7xl mx-auto">

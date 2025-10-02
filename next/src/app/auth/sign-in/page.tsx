@@ -1,7 +1,7 @@
 // next/src/app/sign-in/page.tsx
 'use client';
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
@@ -13,7 +13,7 @@ interface FormData {
 
 export default function SignInPage() {
   // 認証情報を取得
-  const { signIn, guestSignIn, loading, error, isLoggedIn } = useAuth();
+  const {  signIn, loading, error, isLoggedIn, guestSignIn } = useAuthStore()  
   const router = useRouter();
 
   // フォームの設定

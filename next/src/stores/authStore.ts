@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import axios from 'axios';
 
 // この情報のみローカルストレージに保存される/saveUserToStorageでセットされる
 interface User {
@@ -59,7 +60,7 @@ export const useAuthStore = create<AuthStore>()(
         const { setUser, setLoading, setError, setAuthTokens } = get()
         setLoading(true);
         setError(null);
-        
+
         try {
           // Rails側はregistrationというキーでネストされたデータを期待している
           const requestBody = {
@@ -71,119 +72,89 @@ export const useAuthStore = create<AuthStore>()(
             }
           };
 
-          const response = await fetch('http://localhost:3000/api/v1/auth',{
-            method: "POST",
-            headers:{ 'Content-Type': 'application/json' },
-            body: JSON.stringify(requestBody)
-          });
-      
-          if (response.ok) {
+          const response = await axios.post('http://localhost:3000/api/v1/auth', requestBody);
 
-            const accessToken = response.headers.get('access-token')
-            const client = response.headers.get('client')
-            const uid = response.headers.get('uid')
-            if (accessToken && client && uid) {
-              setAuthTokens({ accessToken, client, uid })
-            }
-
-            const userData = await response.json();
-            const userInfo = userData.data;
-      
-            setUser(userInfo)
-            setLoading(false);
-            return true;
-          } else {
-            const errorData = await response.json();
-            setError(errorData.errors?.full_messages?.[0] || 'アカウント登録に失敗しました')
-            setLoading(false);
-           return false;
+          const accessToken = response.headers['access-token']
+          const client = response.headers['client']
+          const uid = response.headers['uid']
+          if (accessToken && client && uid) {
+            setAuthTokens({ accessToken, client, uid })
           }
+
+          const userInfo = response.data.data;
+
+          setUser(userInfo)
+          setLoading(false);
+          return true;
         } catch (error) {
-          // 4. 失敗時の処理
-          setError('ネットワークエラーが発生しました')
+          if (axios.isAxiosError(error) && error.response) {
+            setError(error.response.data.errors?.full_messages?.[0] || 'アカウント登録に失敗しました')
+          } else {
+            setError('ネットワークエラーが発生しました')
+          }
           setLoading(false);
           return false;
         }
       },
       signIn: async (email: string, password: string) => {
-        // 1. ローディング開始とエラークリア
-        // どうやって状態を更新する？
         const { setUser, setLoading, setError, setAuthTokens } = get()
         setLoading(true);
         setError(null);
-        
+
         try {
-          const response = await fetch('http://localhost:3000/api/v1/auth/sign_in',{
-            method: "POST",
-            headers:{ 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+          const response = await axios.post('http://localhost:3000/api/v1/auth/sign_in', {
+            email,
+            password
           });
-      
-          if (response.ok) {
 
-            const accessToken = response.headers.get('access-token')
-            const client = response.headers.get('client')
-            const uid = response.headers.get('uid')
-            if (accessToken && client && uid) {
-              setAuthTokens({ accessToken, client, uid })
-            }
-
-            const userData = await response.json();
-            const userInfo = userData.data;      
-      
-            setUser(userInfo)
-            setLoading(false);
-            return true;
-          } else {
-            setError('メールアドレスまたはパスワードが間違っています')
-            setLoading(false);
-           return false;
+          const accessToken = response.headers['access-token']
+          const client = response.headers['client']
+          const uid = response.headers['uid']
+          if (accessToken && client && uid) {
+            setAuthTokens({ accessToken, client, uid })
           }
+
+          const userInfo = response.data.data;
+
+          setUser(userInfo)
+          setLoading(false);
+          return true;
         } catch (error) {
-          // 4. 失敗時の処理
-          setError('ネットワークエラーが発生しました')
+          if (axios.isAxiosError(error) && error.response) {
+            setError('メールアドレスまたはパスワードが間違っています')
+          } else {
+            setError('ネットワークエラーが発生しました')
+          }
           setLoading(false);
           return false;
         }
       },
       guestSignIn: async () => {
-        // 1. ローディング開始とエラークリア
-        // どうやって状態を更新する？
         const { setUser, setLoading, setError, setAuthTokens } = get()
         setLoading(true);
         setError(null);
-        
+
         try {
-          const response = await fetch('http://localhost:3000/api/v1/auth/guest_sign_in',{
-            method: "POST",
-            headers:{
-              'Content-Type': 'application/json',
-            }
-          });
-      
-          if (response.ok) {
+          const response = await axios.post('http://localhost:3000/api/v1/auth/guest_sign_in');
 
-            const accessToken = response.headers.get('access-token')
-            const client = response.headers.get('client')
-            const uid = response.headers.get('uid')
-            if (accessToken && client && uid) {
-              setAuthTokens({ accessToken, client, uid })
-            }
-
-            const userData = await response.json();
-            const userInfo = userData.data;
-      
-            setUser(userInfo)
-            setLoading(false);
-            return true;
-          } else {
-            setError('ゲストログインに失敗しました')
-            setLoading(false);
-           return false;
+          const accessToken = response.headers['access-token']
+          const client = response.headers['client']
+          const uid = response.headers['uid']
+          if (accessToken && client && uid) {
+            setAuthTokens({ accessToken, client, uid })
           }
+
+          const userInfo = response.data.data;
+
+          setUser(userInfo)
+          setLoading(false);
+          return true;
         } catch (error) {
-          // 4. 失敗時の処理
-          setError('ネットワークエラーが発生しました')
+          if (axios.isAxiosError(error) && error.response) {
+            setError('ゲストログインに失敗しました')
+          } else {
+            setError('ネットワークエラーが発生しました')
+          }
           setLoading(false);
           return false;
         }

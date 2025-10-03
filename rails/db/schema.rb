@@ -10,26 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 20_250_924_105_845) do
-  create_table "books", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.string "google_books_id", null: false
-    t.string "title", null: false
-    t.text "authors"
-    t.string "publisher"
-    t.string "published_date"
-    t.text "description"
-    t.string "isbn_13"
-    t.string "thumbnail_url"
-    t.bigint "user_id", null: false
-    t.integer "reading_status", default: 0, null: false
-    t.datetime "added_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["google_books_id"], name: "index_books_on_google_books_id"
-    t.index ["reading_status"], name: "index_books_on_reading_status"
-    t.index ["user_id"], name: "index_books_on_user_id"
-  end
-
+ActiveRecord::Schema[7.2].define(version: 2025_10_03_094457) do
   create_table "users", charset: "utf8mb4", collation: "utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "provider", default: "email", null: false
     t.string "uid", default: "", null: false
@@ -54,6 +35,4 @@ ActiveRecord::Schema[7.2].define(version: 20_250_924_105_845) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true
   end
-
-  add_foreign_key "books", "users"
 end

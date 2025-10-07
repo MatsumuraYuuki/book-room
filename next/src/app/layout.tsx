@@ -17,7 +17,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "BookRoom",
+  title: "青空本棚",
   description: "記事共有アプリ",
 };
 

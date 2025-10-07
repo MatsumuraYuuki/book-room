@@ -25,7 +25,7 @@ export const Header = () => {
             {/* ロゴ */}
             <div className="flex items-center">
               <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
-                BookRoom
+                青空本棚
               </Link>
             </div>
 

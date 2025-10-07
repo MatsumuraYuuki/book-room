@@ -29,7 +29,6 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* 全体をAuthProviderで囲み、ここにstateの状態を記憶しておくことでページ移動してもstateの再取得が可能になる */}
           <div className="min-h-screen bg-white">
             <Header />
             <Navigation />

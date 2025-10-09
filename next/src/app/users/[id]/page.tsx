@@ -20,7 +20,6 @@ export default function UserPage({ params }: Props) {
   const { user: currentUser, isLoggedIn } = useAuthStore()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
 
   // URL「users/1ああ」でもID1のページが表示されてしまうエラー対処。IDが数値のみかチェック
   useEffect(() => {
@@ -38,7 +37,7 @@ export default function UserPage({ params }: Props) {
         setUser(response.data)
       } catch (error) {
         console.error('取得失敗:', error);
-        setError('ユーザー情報の取得に失敗しました。存在しないユーザーです。');
+        notFound();
       } finally {
         setLoading(false);
       }
@@ -47,8 +46,7 @@ export default function UserPage({ params }: Props) {
   }, [params.id]);
 
   if (loading) return <div>読み込み中...</div>;
-  if (error) return <div>{error}</div>;
-  if (!user) return <div>ユーザーが見つかりません</div>;
+  if (!user) return notFound(); 
 
   return (
     <div>
@@ -59,7 +57,6 @@ export default function UserPage({ params }: Props) {
       {isOwnProfile && (
         <div>
           <Link href="/edit/profile">プロフィール編集</Link>
-          <Link href="/edit/bookshelf">本棚編集</Link>
         </div>
       )}
 

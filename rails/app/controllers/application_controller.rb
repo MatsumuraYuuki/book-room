@@ -1,5 +1,5 @@
 class ApplicationController < ActionController::API
-  # HTTPヘッダーからトークン情報を自動的に取得・検証。current_userメソッドなどが使用可能に 
+  # HTTPヘッダーからトークン情報を自動的に取得・検証。current_userメソッドなどが使用可能に
   include DeviseTokenAuth::Concerns::SetUserByToken
 
   # ActionDispatch::Request::Session::DisabledSessionErrorの対策ファイル
@@ -9,7 +9,7 @@ class ApplicationController < ActionController::API
   before_action :configure_permitted_parameters, if: :devise_controller?
 
   protected
-  
+
     # Deviseのストロングパラメータを設定
     # devise_parameter_sanitizerは、deviseが提供するストロングパラメータの設定メソッド
     # :sign_upは、ユーザー登録時に許可するパラメータを指定

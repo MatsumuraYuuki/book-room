@@ -72,7 +72,7 @@ export const useAuthStore = create<AuthStore>()(
             }
           };
 
-          const response = await axios.post('http://localhost:3000/api/v1/auth', requestBody);
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth`, requestBody);
 
           const accessToken = response.headers['access-token']
           const client = response.headers['client']
@@ -102,7 +102,7 @@ export const useAuthStore = create<AuthStore>()(
         setError(null);
 
         try {
-          const response = await axios.post('http://localhost:3000/api/v1/auth/sign_in', {
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/sign_in`, {
             email,
             password
           });
@@ -135,7 +135,7 @@ export const useAuthStore = create<AuthStore>()(
         setError(null);
 
         try {
-          const response = await axios.post('http://localhost:3000/api/v1/auth/guest_sign_in');
+          const response = await axios.post(`${process.env.NEXT_PUBLIC_API_BASE_URL}/auth/guest_sign_in`);
 
           const accessToken = response.headers['access-token']
           const client = response.headers['client']

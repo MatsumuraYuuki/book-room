@@ -16,7 +16,7 @@ interface FormData {
 
 export default function SignUpPage() {
   // 認証情報を取得
-  const { signUp, loading, error, isLoggedIn } = useAuthStore();
+  const { signUp, loading, error, isLoggedIn, user } = useAuthStore();
   const router = useRouter();
 
   // フォームの設定
@@ -25,25 +25,24 @@ export default function SignUpPage() {
   // パスワード確認用
   const password = watch('password');
 
-  // 既にログインしている場合はホームに移動
+  // 既にログインしている場合は自分のユーザーページに移動
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push('/profile');
+    if (isLoggedIn && user) {
+      router.push(`/users/${user.id}`);
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, user, router]);
 
   // フォームが送信された時の処理
   const onSubmit = async (data: FormData) => {
     const success = await signUp(data.name, data.email, data.password);
-    if (success) {
-      router.push('/profile'); // サインアップ成功時はprofileに移動
+    if (success && user) {
+      router.push(`/users/${user.id}`); // サインアップ成功時は自分のユーザーページに移動
     }
   };
 
   return (
     <>
       <h1 className="text-2xl font-bold text-center mb-6">サインアップ</h1>
-      
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* ユーザー名入力 */}
         <div>

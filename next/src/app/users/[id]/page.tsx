@@ -33,7 +33,7 @@ export default function UserPage({ params }: Props) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`http://localhost:3000/api/v1/users/${params.id}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${params.id}`);
         setUser(response.data)
       } catch (error) {
         console.error('取得失敗:', error);

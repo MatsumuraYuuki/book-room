@@ -2,7 +2,7 @@
 # 継承元をApplicationController から Api::V1::BaseControllerに変更
 # コントローラーの継承元をApi::V1::BaseControllerにすることで、 devise 提供のメソッドをエイリアス後の命名で使用できる
 class Api::V1::Current::UsersController < Api::V1::BaseController
-  before_action :authenticate_user!  # ユーザーが認証済みであるか否かをbooleanで返す
+  before_action :authenticate_user! # ユーザーが認証済みであるか否かをbooleanで返す
 
   def show
     # CurrentUserSerializerにて id、name、emailカラムのみが、レスポンスボディーに含まれるようになる

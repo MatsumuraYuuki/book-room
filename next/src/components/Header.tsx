@@ -2,12 +2,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation';
 
 export const Header = () => {
   // 認証情報を取得
-  const { user, isLoggedIn, signOut } = useAuth();
+  const { user, isLoggedIn, signOut } = useAuthStore();
   const router = useRouter();
 
   // サインアウトボタンがクリックされた時の処理
@@ -25,7 +25,7 @@ export const Header = () => {
             {/* ロゴ */}
             <div className="flex items-center">
               <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
-                BookRoom
+                青空本棚
               </Link>
             </div>
 

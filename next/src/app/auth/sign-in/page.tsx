@@ -1,8 +1,7 @@
 // next/src/app/sign-in/page.tsx
 'use client';
-
 import { useForm } from 'react-hook-form';
-import { useAuth } from '../../../contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import Link from 'next/link';
@@ -14,32 +13,32 @@ interface FormData {
 
 export default function SignInPage() {
   // 認証情報を取得
-  const { signIn, guestSignIn, loading, error, isLoggedIn } = useAuth();
+  const {  signIn, loading, error, isLoggedIn, guestSignIn, user } = useAuthStore()
   const router = useRouter();
 
   // フォームの設定
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  // 既にログインしている場合はホームに移動
+  // 既にログインしている場合は自分のユーザーページに移動
   useEffect(() => {
-    if (isLoggedIn) {
-      router.push('/profile');
+    if (isLoggedIn && user) {
+      router.push(`/users/${user.id}`);
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, user, router]);
 
   // フォームが送信された時の処理
   const onSubmit = async (data: FormData) => {
     const success = await signIn(data.email, data.password);
-    if (success) {
-      router.push('/profile'); // サインイン成功時はprofileに移動
+    if (success && user) {
+      router.push(`/users/${user.id}`); // サインイン成功時は自分のユーザーページに移動
     }
   };
    
   // ゲストログインボタンが押された時の処理
   const handleGuestSignIn = async () => {
     const success = await guestSignIn();
-    if (success) {
-      router.push('/profile'); // ゲストログイン成功時はprofileに移動
+    if (success && user) {
+      router.push(`/users/${user.id}`); // ゲストログイン成功時は自分のユーザーページに移動
     }
   };
 

@@ -1,9 +1,9 @@
 class User < ApplicationRecord
-  devise :database_authenticatable,  # DBに保存されたパスワードで認証
-         :registerable,  # ユーザー登録機能
-         :recoverable,  #パスワードリセット機能
-         :rememberable, #ログイン情報を保存する機能
-         :validatable  #メールアドレスとパスワードのバリデーション
+  devise :database_authenticatable, # DBに保存されたパスワードで認証
+         :registerable, # ユーザー登録機能
+         :recoverable,  # パスワードリセット機能
+         :rememberable, # ログイン情報を保存する機能
+         :validatable # メールアドレスとパスワードのバリデーション
 
   include DeviseTokenAuth::Concerns::User
 

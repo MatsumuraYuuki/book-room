@@ -1,11 +1,11 @@
 // pages/auth-test.tsx または app/auth-test/page.tsx
 'use client';
 
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuthStore } from '@/stores/authStore'
 import { useState } from 'react';
 
 const AuthTestPage = () => {
-  const { user, isLoggedIn, loading, error, signIn, signOut } = useAuth();
+  const { user, isLoggedIn, loading, error, signIn, signOut } = useAuthStore();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -138,7 +138,7 @@ const AuthTestPage = () => {
           コンソールに状態を出力
         </button>
         <button 
-          onClick={() => console.log('💾 ローカルストレージ:', localStorage.getItem('user'))}
+          onClick={() => console.log('💾 ローカルストレージ:', localStorage.getItem('auth-storage'))}
           style={{ 
             padding: '5px 10px', 
             margin: '5px', 

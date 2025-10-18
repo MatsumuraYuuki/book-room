@@ -5,6 +5,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useAuthStore } from "@/stores/authStore";
 import { notFound } from 'next/navigation';
+import Image from 'next/image';
 
 type Props = {
   params: { id: string }
@@ -13,7 +14,8 @@ type Props = {
 type User = {
   name: string,
   email: string,
-  id: number
+  id: number,
+  image?: string
 }
 
 export default function UserPage({ params }: Props) {
@@ -52,11 +54,17 @@ export default function UserPage({ params }: Props) {
     <div>
       <h1>プロフィール</h1>
       <p>ユーザー名: {user.name}</p>
+      <Image
+      src={user.image || "/default-avatar.png" }
+      alt="user.name"
+      width={100}
+      height={100
+      }/>
       <p>メールアドレス: {user.email}</p> 
 
       {isOwnProfile && (
         <div>
-          <Link href="/edit/profile">プロフィール編集</Link>
+          <Link href="/profile/edit">プロフィール編集</Link>
         </div>
       )}
 

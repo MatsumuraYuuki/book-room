@@ -11,8 +11,14 @@ class Api::V1::UsersController < ApplicationController
       id: user.id,
       name: user.name,
       email: user.email,
+      image: user.image
     }
   rescue ActiveRecord::RecordNotFound
     render json: { error: "User not found" }, status: :not_found
   end
+
+  def update
+    
+  end
+
 end

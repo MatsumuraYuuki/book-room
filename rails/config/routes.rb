@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resources :users, only: [:show]
 
       namespace :current do
-        resource :user, only: [:show, :update]
+        resource :user, only: [:show, :update], controller: 'user'
       end
       get "health_check", to: "health_check#index"
       mount_devise_token_auth_for "User", at: "auth", controllers: {

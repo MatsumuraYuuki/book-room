@@ -8,4 +8,19 @@ class Api::V1::Current::UsersController < Api::V1::BaseController
     # CurrentUserSerializerにて id、name、emailカラムのみが、レスポンスボディーに含まれるようになる
     render json: current_user, serializer: CurrentUserSerializer
   end
+
+  def update
+    if current_user.update(user_params)
+      render json: current_user, serializer: CurrentUserSerializer
+    else  
+      render json: { error: "User not updated" }, status: :unprocessable_entity
+
+    end
+  end
+
+  public
+
+  def user_params
+    params.require(:user).permit(:name, :image)
+  end
 end

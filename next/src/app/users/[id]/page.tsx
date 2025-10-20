@@ -15,7 +15,7 @@ type User = {
   name: string,
   email: string,
   id: number,
-  image?: string
+  image_url?: string
 }
 
 export default function UserPage({ params }: Props) {
@@ -55,7 +55,7 @@ export default function UserPage({ params }: Props) {
       <h1>プロフィール</h1>
       <p>ユーザー名: {user.name}</p>
       <Image
-      src={user.image || "/default-avatar.png" }
+      src={user.image_url || "/default-avatar.png" }
       alt="user.name"
       width={100}
       height={100

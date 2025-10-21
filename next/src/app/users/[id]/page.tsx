@@ -55,6 +55,7 @@ export default function UserPage({ params }: Props) {
       <h1>プロフィール</h1>
       <p>ユーザー名: {user.name}</p>
       <Image
+      className="w-24 h-24 object-cover rounded-full"
       src={user.image_url || "/default-avatar.png" }
       alt="user.name"
       width={100}

@@ -3,7 +3,7 @@ import { useAuthStore } from '../stores/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1';
 
-// axiosインスタンスを作成
+//  使う時 : await api.METHODS(第一引数: URL, 第二引数: 送信するデータ, 第三引数: 設定(config));
 export const api = axios.create({
   baseURL: BASE_URL,
   headers: {
@@ -11,17 +11,20 @@ export const api = axios.create({
   },
 });
 
-// リクエストインターセプター：認証トークンを自動的に追加
+// リクエストインターセプター：axiosが提供する「リクエストを送る前に処理を挟む」ためのメソッド。API呼び出しの直前に、自動的に処理を実行する
 api.interceptors.request.use(
   (config) => {
+    // .getState()で発火した時、全てのstateの状態を取得する
     const { authTokens } = useAuthStore.getState();
 
     if (authTokens) {
+      // 取得した全てのstateの状態から認証に必要なものだけ取り出す
       config.headers['access-token'] = authTokens.accessToken;
       config.headers['client'] = authTokens.client;
       config.headers['uid'] = authTokens.uid;
     }
 
+    // return configで「設定を変更（認証情報の追加）変更された」とaxiosは自動で認識するする
     return config;
   },
   (error) => {

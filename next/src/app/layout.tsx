@@ -3,7 +3,6 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from '@/components/Header';
-import { Navigation } from '@/components/Navigation';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,19 +28,8 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <div className="min-h-screen bg-white">
-            <Header />
-            <Navigation />
-            
-            <main className="md:pl-64 flex flex-col min-h-screen pt-16">
-              <div className="flex-1 p-4 md:p-8">
-                {children}
-              </div>
-
-              {/* モバイル用の下部余白 */}
-              <div className="h-20 md:h-0"></div>
-            </main>
-          </div>
+        <Header />
+        {children}
       </body>
     </html>
   );

@@ -16,6 +16,13 @@ const nextConfig = {
         port: '3000',
         pathname: '/rails/active_storage/**',
       },
+      // Docker開発環境: Railsコンテナ
+      {
+        protocol: 'http',
+        hostname: 'rails',
+        port: '3000',
+        pathname: '/rails/active_storage/**',
+      },
       // 本番環境: AWS S3
       {
         protocol: 'https',

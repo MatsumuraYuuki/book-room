@@ -1,6 +1,10 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
+
+  # [ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts:への対応
+  config.hosts << "rails"
+
   config.after_initialize do
     Bullet.enable        = true
     Bullet.alert         = true
@@ -87,5 +91,5 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :letter_opener_web
 
   # Rails側で画像のURLを含めたレスポンスをフロント側に返します。
-  Rails.application.routes.default_url_options = { host: "localhost", port: 3000 }
+  Rails.application.routes.default_url_options = { host: "rails", port: 3000 }
 end

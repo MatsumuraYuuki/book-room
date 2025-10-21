@@ -47,8 +47,6 @@ Rails.application.configure do
   # caching is enabled.
   config.action_mailer.perform_caching = false
 
-  config.action_mailer.default_url_options = { host: "localhost", port: 3000 }
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
@@ -84,7 +82,10 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: "no-replay@example.com" }
   #  メール内のURLリンク生成用のホスト設定
   config.action_mailer.default_url_options = { host: "localhost:3000" }
-
+  
   # 開発環境でのメール配信方法 をletter_opener_webに指定
   config.action_mailer.delivery_method = :letter_opener_web
+
+  # Rails側で画像のURLを含めたレスポンスをフロント側に返します。
+  Rails.application.routes.default_url_options = { host: "localhost", port: 3000 }
 end

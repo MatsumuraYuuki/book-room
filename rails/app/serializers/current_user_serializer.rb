@@ -5,7 +5,7 @@ class CurrentUserSerializer < ActiveModel::Serializer
   # JSONで使えるようにimageオブジェクトをURL文字列に変換する
   def image_url
     if object.image.attached?
-      rails_blob_path(object.image, disposition: 'inline')
+      rails_blob_url(object.image, disposition: 'inline')
     else
       nil
     end

@@ -13,7 +13,7 @@ class User < ApplicationRecord
 
   # image_url メソッドを追加（どこからでも呼び出せる）
   def image_url
-    image.attached? ? Rails.application.routes.url_helpers.rails_blob_path(image, only_path: true) : nil
+    image.attached? ? Rails.application.routes.url_helpers.rails_blob_url(image) : nil
   end  
 
   # DeviseTokenAuth用にJSONレスポンスをカスタマイズ

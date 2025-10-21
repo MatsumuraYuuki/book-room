@@ -19,10 +19,10 @@ export default function SignInPage() {
   // フォームの設定
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-  // 既にログインしている場合は自分のユーザーページに移動
+  // 既にログインしている場合はプロフィールページに移動
   useEffect(() => {
     if (isLoggedIn && user) {
-      router.push(`/users/${user.id}`);
+      router.push('/profile');
     }
   }, [isLoggedIn, user, router]);
 
@@ -30,7 +30,7 @@ export default function SignInPage() {
   const onSubmit = async (data: FormData) => {
     const success = await signIn(data.email, data.password);
     if (success && user) {
-      router.push(`/users/${user.id}`); // サインイン成功時は自分のユーザーページに移動
+      router.push('/profile'); // サインイン成功時はプロフィールページに移動
     }
   };
    
@@ -38,7 +38,7 @@ export default function SignInPage() {
   const handleGuestSignIn = async () => {
     const success = await guestSignIn();
     if (success && user) {
-      router.push(`/users/${user.id}`); // ゲストログイン成功時は自分のユーザーページに移動
+      router.push('/profile'); // ゲストログイン成功時はプロフィールページに移動
     }
   };
 

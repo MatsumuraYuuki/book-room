@@ -35,31 +35,38 @@ export default function ProfilePage() {
   }, []);
 
   if (loading) return <div>読み込み中...</div>;
-  if (!user) return notFound(); 
+  if (!user) return notFound();
 
   return (
-    <div>
-      <h1>プロフィール</h1>
-      <p>ユーザー名: {user.name}</p>
-      <Image
-      className="w-24 h-24 object-cover rounded-full"
-      src={user.image_url || "/default-avatar.png" }
-      alt={user.name}
-      width={100}
-      height={100}
-      />
-      <p>メールアドレス: {user.email}</p> 
-
-      
-      <div>
-        <Link href="/profile/edit">プロフィール編集</Link>
+    <div className="max-w-4xl mx-auto">
+      {/* ヘッダー部分 */}
+      <div className="bg-white shadow rounded-lg p-6 mb-6">
+        <div className="flex items-center space-x-6">
+          <Image
+            className="w-24 h-24 object-cover rounded-full"
+            src={user.image_url || "/default-avatar.png"}
+            alt={user.name}
+            width={96}
+            height={96}
+          />
+          <div className="flex-1">
+            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+            <p className="text-gray-600">{user.email}</p>
+            <Link
+              href="/profile/edit"
+              className="mt-3 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+            >
+              プロフィール編集
+            </Link>
+          </div>
+        </div>
       </div>
-      
 
-      <div>
-        <h2>本棚</h2>
-        <p>（本棚は後で実装予定）</p>
-      </div>      
+      {/* 本棚セクション */}
+      <div className="bg-white shadow rounded-lg p-6">
+        <h2 className="text-xl font-bold text-gray-900 mb-4">本棚</h2>
+        <p className="text-gray-500">（本棚は後で実装予定）</p>
+      </div>
     </div>
   );
 }

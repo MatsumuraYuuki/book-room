@@ -25,10 +25,10 @@ export default function SignUpPage() {
   // パスワード確認用
   const password = watch('password');
 
-  // 既にログインしている場合は自分のユーザーページに移動
+  // 既にログインしている場合はプロフィールページに移動
   useEffect(() => {
     if (isLoggedIn && user) {
-      router.push(`/users/${user.id}`);
+      router.push('/profile');
     }
   }, [isLoggedIn, user, router]);
 
@@ -36,7 +36,7 @@ export default function SignUpPage() {
   const onSubmit = async (data: FormData) => {
     const success = await signUp(data.name, data.email, data.password);
     if (success && user) {
-      router.push(`/users/${user.id}`); // サインアップ成功時は自分のユーザーページに移動
+      router.push('/profile'); // サインアップ成功時はプロフィールページに移動
     }
   };
 

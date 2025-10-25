@@ -7,6 +7,8 @@ class User < ApplicationRecord
 
   include DeviseTokenAuth::Concerns::User
 
+  validates :name, presence: true
+  
   # has_one_attached は Active Storage で画像1枚を関連付けるメソッド
   # これで user.image でファイルにアクセスできるようになる
   has_one_attached :image

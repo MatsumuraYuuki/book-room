@@ -22,8 +22,8 @@ type User = {
 
 export default function ProfileEditPage() {
   // 状態管理
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
+  // const [user, setUser] = useState<User | null>(null);
+  // const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [previewUrl,] = useState<string>('');
 
@@ -31,20 +31,29 @@ export default function ProfileEditPage() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
 
   // TODO: ユーザー情報を取得する useEffect
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await api.get("/current/user")
-        setUser(response.data)
-        setValue('name', response.data.name)
-      } catch (error) {
-        console.error('取得失敗:', error);
-      } finally {
-        setLoading(false)
-      }
+  // useEffect(() => {
+  //   const fetchUser = async () => {
+  //     try {
+  //       const response = await api.get("/current/user")
+  //       setUser(response.data)
+  //       setValue('name', response.data.name)
+  //     } catch (error) {
+  //       console.error('取得失敗:', error);
+  //     } finally {
+  //       setLoading(false)
+  //     }
+  //   }
+  //   fetchUser();
+  // }, [])
+
+  // 置き換え
+  const { data: FormData = [], isLoading: loading, error } = useQuery({
+    queryKey: ['studyRecords'],
+    queryFn: async () => {
+      const response = await api.get('/study_records');
+      return response.data.data;
     }
-    fetchUser();
-  }, [])
+  });  
 
   // TODO: 画像が選択されたときの処理
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,7 +92,7 @@ export default function ProfileEditPage() {
       console.error('更新失敗:', error);
     }
   };
-  
+
   // 取得中の場合は早期リターンで別の画面を表示
   if (loading) {
     return <div>読み込み中...</div>;

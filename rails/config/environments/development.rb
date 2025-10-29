@@ -1,7 +1,6 @@
 require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
-
   # [ActionDispatch::HostAuthorization::DefaultResponseApp] Blocked hosts:への対応
   config.hosts << "rails"
 
@@ -86,7 +85,7 @@ Rails.application.configure do
   config.action_mailer.default_options = { from: "no-replay@example.com" }
   #  メール内のURLリンク生成用のホスト設定
   config.action_mailer.default_url_options = { host: "localhost:3000" }
-  
+
   # 開発環境でのメール配信方法 をletter_opener_webに指定
   config.action_mailer.delivery_method = :letter_opener_web
 

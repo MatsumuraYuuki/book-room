@@ -29,7 +29,6 @@ Rails.application.configure do
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for Apache
   # config.action_dispatch.x_sendfile_header = "X-Accel-Redirect" # for NGINX
 
-
   # ファイルをAmazon S3に保存する
   config.active_storage.service = :amazon
   # Assume all access to the app is happening through a SSL-terminating reverse proxy.

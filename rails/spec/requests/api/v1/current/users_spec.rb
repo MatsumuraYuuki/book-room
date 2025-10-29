@@ -20,6 +20,7 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
         expect(response).to have_http_status(:ok)
       end
     end
+
     context "ヘッダー情報が空のままリクエストが送信された時" do
       let(:headers) { nil }
 
@@ -39,7 +40,7 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
     let(:headers) { current_user.create_new_auth_token }
 
     context "更新成功の場合" do
-      let(:params) { {user: {name: "updated name"}} }
+      let(:params) { { user: { name: "updated name" } } }
 
       it "nameが更新される" do
         subject
@@ -47,11 +48,12 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
         res = response.parsed_body
         # v1/current/users_controller.rbのshowアクションで render json: current_userが帰ってくる
         expect(res["name"]).to eq "updated name"
-        expect(response).to have_http_status(:ok)        
+        expect(response).to have_http_status(:ok)
       end
     end
+
     context "更新失敗の場合" do
-      let(:params) { {user: { name: nil }} }
+      let(:params) { { user: { name: nil } } }
 
       it "'処理失敗の情報を返す" do
         subject
@@ -61,5 +63,5 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end
-  end  
+  end
 end

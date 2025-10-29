@@ -30,7 +30,7 @@ export default function ProfileEditPage() {
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
 
 
-  const { data: user = null, isLoading: loading, error } = useQuery({
+  const { data: user = null, isLoading: loading, error } = useQuery<User>({
     queryKey: ['user'],
     queryFn: async () => {
       const response = await api.get('/current/user');

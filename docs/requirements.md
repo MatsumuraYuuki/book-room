@@ -17,6 +17,7 @@
 - Zustand（状態管理）
 - axios（HTTPクライアント）
 - React Hook Form（フォーム管理）
+- react-query
 
 ### バックエンド
 - Ruby 3.2.2

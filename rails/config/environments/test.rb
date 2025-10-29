@@ -53,6 +53,11 @@ Rails.application.configure do
   # incoming request so you'll need to provide the :host parameter yourself.
   config.action_mailer.default_url_options = { host: "www.example.com" }
 
+  # ActiveStorage用のURL生成設定（追加）
+  # rails_blob_url を生成する際にホストが見つからないという問題
+  # エラー：「Missing host to link to! Please provide the :host parameter, set default_url_options[:host]」
+  Rails.application.routes.default_url_options = { host: "www.example.com" }
+
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
 

@@ -12,4 +12,39 @@ RSpec.describe User, type: :model do
       expect(user).to be_confirmed
     end
   end
+
+  context "バリデーション" do
+    let(:user) { create(:user) }
+
+    it "name が必須であること" do
+      user.name = nil
+      expect(user).not_to be_valid
+    end
+  end
+  
+  context "image" do
+    let(:user) { create(:user) }
+
+    it "画像を添付できる" do
+      user.image.attach(
+        io: File.open(Rails.root.join('spec', 'fixtures', 'test_image.webp')),
+        filename: 'test_image.webp',
+        content_type: 'image/webp'
+      )
+      expect(user.image).to be_attached
+    end
+
+    it "画像が添付されている場合、URLを返す" do
+      user.image.attach(
+        io: File.open(Rails.root.join('spec', 'fixtures', 'test_image.webp')),
+        filename: 'test_image.webp',
+        content_type: 'image/webp'
+      )
+      expect(user.image_url).to include("blob") 
+
+    end
+    it "画像が添付されていない場合、nilを返す" do
+      expect(user.image_url).to be_nil
+    end        
+  end
 end

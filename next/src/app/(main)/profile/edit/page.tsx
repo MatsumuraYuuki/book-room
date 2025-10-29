@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 import { api } from '@/utils/api';
@@ -22,38 +23,26 @@ type User = {
 
 export default function ProfileEditPage() {
   // 状態管理
-  // const [user, setUser] = useState<User | null>(null);
-  // const [loading, setLoading] = useState(true);
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [previewUrl,] = useState<string>('');
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   const router = useRouter();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
 
-  // TODO: ユーザー情報を取得する useEffect
-  // useEffect(() => {
-  //   const fetchUser = async () => {
-  //     try {
-  //       const response = await api.get("/current/user")
-  //       setUser(response.data)
-  //       setValue('name', response.data.name)
-  //     } catch (error) {
-  //       console.error('取得失敗:', error);
-  //     } finally {
-  //       setLoading(false)
-  //     }
-  //   }
-  //   fetchUser();
-  // }, [])
 
-  // 置き換え
-  const { data: FormData = [], isLoading: loading, error } = useQuery({
-    queryKey: ['studyRecords'],
+  const { data: user = null, isLoading: loading, error } = useQuery({
+    queryKey: ['user'],
     queryFn: async () => {
-      const response = await api.get('/study_records');
-      return response.data.data;
+      const response = await api.get('/current/user');
+      return response.data;
     }
   });  
+  
+  useEffect(() => {
+    if (user) {
+      setValue('name', user.name);
+    }
+  }, [user, setValue]);  
 
   // TODO: 画像が選択されたときの処理
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +86,10 @@ export default function ProfileEditPage() {
   if (loading) {
     return <div>読み込み中...</div>;
   }
+  // エラー時の表示
+  if (error) {
+    return <div>エラーが発生しました</div>;
+  }  
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -154,7 +147,7 @@ export default function ProfileEditPage() {
         
         </div>
         {/* 送信ボタン */}
-        <button type="submit" className="border boreder-black">更新</button>
+        <button type="submit" className="border border-black">更新</button>
       </form>
     </div>
   );

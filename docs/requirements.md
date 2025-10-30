@@ -71,16 +71,16 @@ end
 青空文庫の全作品データ（約15,000件）を保存
 ```ruby
 create_table "aozora_books", charset: "utf8mb4" do |t|
-  t.string "title", null: false              # 作品タイトル
-  t.string "author", null: false             # 作者名
-  t.string "aozora_content_url", null: false # 本文HTML URL
-  t.string "aozora_card_url"                 # 図書カード URL
-  t.integer "character_count"                # 文字数
-  t.integer "estimated_reading_time"         # 推定読書時間（分）
-  t.integer "published_year"                 # 公開年
+  t.string "aozora_book_id", null: false      # CSVの「作品ID」
+  t.string "title", null: false               # CSVの「作品名」
+  t.string "author", null: false              # CSVの「姓 名」を結合
+  t.string "aozora_content_url", null: false  # CSVの「XHTML/HTMLファイルURL」
+  t.string "aozora_card_url"                  # CSVの「図書カードURL」
+  t.date "published_date"                     # CSVの「公開日」(yearではなくdate)
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
   
+  t.index ["aozora_book_id"], unique: true
   t.index ["title"]
   t.index ["author"]
 end
@@ -91,7 +91,7 @@ end
 ```ruby
 create_table "bookshelves", charset: "utf8mb4" do |t|
   t.bigint "user_id", null: false
-  t.bigint "aozora_book_id", null: false
+  t.references :aozora_book, null: false, foreign_key: true #「外部キー制約を自動で追加」
   t.integer "status", default: 0, null: false  # 0:未読, 1:読書中, 2:読了
   t.datetime "completed_at"                     # 読了日時
   t.datetime "created_at", null: false
@@ -165,8 +165,8 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 | 作品検索・一覧 | `/books` | 検索 + 本棚追加 | ⬜ 未実装 |
 | 本棚 | `/my-books` | 追加済み作品一覧 | ⬜ 未実装 |
 | ビューアー | `/reader/:id` | 作品を読む | ⬜ 未実装 |
-| マイページ | `/profile` | プロフィール表示 | ⬜ 未実装 |
-| プロフィール編集 | `/profile/edit` | プロフィール編集 | ⬜ 未実装 |
+| マイページ | `/profile` | プロフィール表示 | ⬜ 一部実装済み |
+| プロフィール編集 | `/profile/edit` | プロフィール編集 | ⬜ 一部実装済み |
 
 ---
 
@@ -183,8 +183,6 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 **表示情報:**
 - 作品タイトル
 - 作者名
-- 推定読書時間
-- 文字数
 
 ### 2. 本棚画面（/my-books）
 

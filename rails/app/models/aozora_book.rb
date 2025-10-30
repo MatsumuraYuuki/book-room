@@ -1,0 +1,2 @@
+class AozoraBook < ApplicationRecord
+end

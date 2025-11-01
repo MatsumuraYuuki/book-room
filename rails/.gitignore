@@ -31,3 +31,6 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# rails/lib/tasks/aozora_books.rakeのデバッグのために作成
+rails/lib/tasks/aozora_debug.rake

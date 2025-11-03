@@ -4,7 +4,9 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      get "aozora_books/index"
       resources :users, only: [:show]
+      resources :aozora_books, only: [:index]
 
       namespace :current do
         resource :user, only: [:show, :update], controller: "user"

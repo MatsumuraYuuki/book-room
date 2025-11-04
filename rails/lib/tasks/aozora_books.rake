@@ -10,6 +10,7 @@ namespace :aozora_books do
     puts "青空文庫CSVをダウンロード中..."
 
     begin
+      # rubocop:disable Security/Open
       URI.open(url) do |zip_file|
         Zip::File.open(zip_file) do |zip|
           # zip.glob('*.csv') = ZIP内の全CSVファイルを検索 / .first = 最初のCSVファイルを取得
@@ -68,8 +69,10 @@ namespace :aozora_books do
 
                 # 配列books_dataに1000件追加された時DBにINSERTする
                 if books_data.size >= 1000
-                  # insert_all: 一括挿入（MySQLで動作）
+                  # insert_all: 一括挿入（MySQLで動作）/ rubocop警告を無効化
+                  # rubocop:disable Rails/SkipsModelValidations
                   AozoraBook.insert_all(books_data)
+                  # rubocop:enable Rails/SkipsModelValidations
                   puts "#{count}件処理完了"
                   books_data = [] # 配列をクリア
                 end
@@ -85,7 +88,9 @@ namespace :aozora_books do
 
             # 残りの1000件以下のデータをINSERT
             if books_data.any?
+              # rubocop:disable Rails/SkipsModelValidations
               AozoraBook.insert_all(books_data)
+              # rubocop:enable Rails/SkipsModelValidations
             end
 
             puts "━━━━━━━━━━━━━━━━━━━━━━━━━━"
@@ -97,6 +102,7 @@ namespace :aozora_books do
           end
         end
       end
+      # rubocop:enable Security/Open
     rescue => e
       puts "❌ エラーが発生しました: #{e.message}"
       puts "   バックトレース:"

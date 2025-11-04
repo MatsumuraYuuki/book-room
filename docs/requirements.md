@@ -43,13 +43,13 @@
 1. 作品検索・一覧画面
 2. 本棚管理機能
 3. ビューアー機能
-4. マイページ・プロフィール編集
+4. マイページ・プロフィール編集✅
 
 ---
 
 ## データベース設計
 
-### 1. users テーブル（既存）
+### 1. users テーブル（既存）✅
 ```ruby
 create_table "users", charset: "utf8mb4" do |t|
   t.string "provider", default: "email", null: false
@@ -67,7 +67,7 @@ create_table "users", charset: "utf8mb4" do |t|
 end
 ```
 
-### 2. aozora_books テーブル（新規作成）
+### 2. aozora_books テーブル（新規作成）✅
 青空文庫の全作品データ（約15,000件）を保存
 ```ruby
 create_table "aozora_books", charset: "utf8mb4" do |t|
@@ -86,7 +86,7 @@ create_table "aozora_books", charset: "utf8mb4" do |t|
 end
 ```
 
-### 3. bookshelves テーブル（新規作成）
+### 3. bookshelves テーブル（新規作成）✅
 ユーザーが追加した作品の読書管理
 ```ruby
 create_table "bookshelves", charset: "utf8mb4" do |t|
@@ -118,20 +118,20 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 ### 認証系（実装済み）
 | メソッド | エンドポイント | 説明 |
 |---------|--------------|------|
-| POST | `/api/auth` | 新規登録 |
-| POST | `/api/auth/sign_in` | ログイン |
-| DELETE | `/api/auth/sign_out` | ログアウト |
+| POST | `/api/auth` | 新規登録 |✅
+| POST | `/api/auth/sign_in` | ログイン |✅
+| DELETE | `/api/auth/sign_out` | ログアウト |✅
 
 ### ユーザー系（未実装）
 | メソッド | エンドポイント | 説明 | リクエスト | レスポンス |
 |---------|--------------|------|-----------|-----------|
-| GET | `/api/users/:id` | プロフィール取得 | - | `{ id, name, image, email }` |
-| PATCH | `/api/users/:id` | プロフィール更新 | `{ name, image }` | `{ id, name, image }` |
+| GET | `/api/users/:id` | プロフィール取得 | - | `{ id, name, image, email }` |✅
+| PATCH | `/api/users/:id` | プロフィール更新 | `{ name, image }` | `{ id, name, image }` |✅
 
 ### 青空文庫作品系（未実装）
 | メソッド | エンドポイント | 説明 | クエリパラメータ | レスポンス |
 |---------|--------------|------|----------------|-----------|
-| GET | `/api/aozora_books` | 作品検索・一覧 | `?title=xxx&author=xxx` | 最大10件の配列 |
+| GET | `/api/aozora_books` | 作品検索・一覧 | `?title=xxx&author=xxx` | 最大10件の配列 |✅
 | GET | `/api/aozora_books/:id/content` | 本文取得 | - | `{ content }` (HTML文字列) |
 
 **検索仕様:**
@@ -295,15 +295,15 @@ rails/
 ## 次のステップ
 
 ### 優先実装順序
-1. aozora_booksテーブル作成 + マイグレーション
-2. bookshelvesテーブル作成 + マイグレーション
-3. 青空文庫CSVインポートrakeタスク
-4. 作品検索API実装
+1. aozora_booksテーブル作成 + マイグレーション✅
+2. bookshelvesテーブル作成 + マイグレーション✅
+3. 青空文庫CSVインポートrakeタスク✅
+4. 作品検索API実装✅
 5. 作品検索・一覧画面実装
 6. 本棚追加API実装
 7. 本棚一覧API実装
 8. 本棚画面実装
 9. 本文取得API実装
 10. ビューアー画面実装
-11. プロフィールAPI実装
-12. マイページ実装
+11. プロフィールAPI実装✅
+12. マイページ実装✅

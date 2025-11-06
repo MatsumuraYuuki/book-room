@@ -26,7 +26,11 @@ class AozoraBook < ApplicationRecord
     keywords.each do |keyword|
       # モデル名.where('カラム名 like ?','検索したい文字列'
       # %#{keyword}%で部分一致検索
-      query = query.where("title LIKE ? OR author LIKE ?", "%#{keyword}%", "%#{keyword}%")
+      query = query.where(
+        "REPLACE(title, ' ', '') LIKE ? OR REPLACE(author, ' ', '')  LIKE ?",
+       "%#{keyword}%",
+       "%#{keyword}%"
+      )
     end
     query.limit(10)
   end

@@ -63,12 +63,12 @@ export default function SearchPage() {
       {/* 検索結果 */}
       <div>
         {mutation.data && mutation.data.map((book) => (
-          <div key={book.aozoraBookId}>
+          <div key={book.id}>
             <p>{book.title}</p>
             <p>{book.author}</p>
             <a
               href={book.aozoraCardUrl}
-              target="_balank"
+              target="_blank"
               rel="noopener noreferrer"
             > 詳細を見る</a>
             <AddToBookshelfDropdown aozoraBookId={book.id}/>

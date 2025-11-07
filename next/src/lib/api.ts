@@ -19,7 +19,6 @@ api.interceptors.request.use(
   (config) => {
     // .getState()で発火した時、全てのstateの状態を取得する
     const { authTokens } = useAuthStore.getState();
-    console.log('config:', config);  // ← これを追加
     if (authTokens) {
       // 取得した全てのstateの状態から認証に必要なものだけ取り出す
       config.headers['access-token'] = authTokens.accessToken;
@@ -28,7 +27,7 @@ api.interceptors.request.use(
     }
 
     // railsが理解しやすいスネークデータに変換
-    if (config.data) {
+    if (config.data && !(config.data instanceof FormData)) {
       config.data = snakecaseKeys(config.data, { deep: true });
     }    
 

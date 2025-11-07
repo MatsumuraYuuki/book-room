@@ -34,7 +34,7 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
         bookshelf: {
           // オブジェクトリテラル / オブジェクトを作っているだけ
           // aozoraBookId → コンポーネントの「引数（props）」からデータを獲得
-          id: aozoraBookId,
+          aozoraBookId: aozoraBookId,
           // status → 関数 mutationFn の「引数」からデータを獲得
           status: status
         }

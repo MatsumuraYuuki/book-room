@@ -2,7 +2,7 @@
 
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
-import { api } from '@/utils/api';
+import { api } from '@/lib/api';
 import { AozoraBook, SearchFormData } from '@/types/common';
 
 export default function SearchPage() {

@@ -29,7 +29,7 @@ export default function SearchPage() {
   // エラー時の表示 / Query（useMutation使用）
   if (mutation.isError) {
     return <div>エラーが発生しました</div>;
-  }  
+  }
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -40,15 +40,15 @@ export default function SearchPage() {
         {/* 作品名・作者名の入力フィールド */}
         <div>
           <label htmlFor="search">作品名・作者名</label>
-          <input 
+          <input
             type="search"
-            id = "search"
+            id="search"
             {...register('keyword', { required: '作品名または作者名を入力してください' })}
             className="border border-gray-300 rounded px-3 py-2 w-full"
           />
           {/* エラーメッセージ表示 */}
           {errors.keyword && <p className="text-red-500">{errors.keyword.message}</p>}
-        
+
         </div>
         {/* 送信ボタン */}
         <button type="submit" className="border border-black">検索</button>
@@ -56,7 +56,17 @@ export default function SearchPage() {
 
       {/* 検索結果 */}
       <div>
-        
+        {mutation.data && mutation.data.map((book) => (
+          <div key={book.aozora_book_id}>
+            <p>{book.title}</p>
+            <p>{book.author}</p>
+            <a
+              href={book.aozora_card_url}
+              target="_balank"
+              rel="noopener noreferrer"
+            > 詳細を見る</a>
+          </div>
+        ))}
       </div>
     </div>
   );

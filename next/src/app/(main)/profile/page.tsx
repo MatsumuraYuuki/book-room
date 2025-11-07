@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { api } from '@/utils/api';
+import { api } from '@/lib/api';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';

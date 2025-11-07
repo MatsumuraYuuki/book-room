@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { api } from '@/utils/api';
+import { api } from '@/lib/api';
 import Image from 'next/image';
 
 // フォームのデータ型
@@ -36,13 +36,13 @@ export default function ProfileEditPage() {
       const response = await api.get('/current/user');
       return response.data;
     }
-  });  
-  
+  });
+
   useEffect(() => {
     if (user) {
       setValue('name', user.name);
     }
-  }, [user, setValue]);  
+  }, [user, setValue]);
 
   // TODO: 画像が選択されたときの処理
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -89,7 +89,7 @@ export default function ProfileEditPage() {
   // エラー時の表示
   if (error) {
     return <div>エラーが発生しました</div>;
-  }  
+  }
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -107,19 +107,19 @@ export default function ProfileEditPage() {
               alt="現在のプロフィール画像"
               width={96}
               height={96}
-            />            
+            />
           </div>
           {/* 右側: プレビュー画像（選択された場合のみ表示） */}
           {previewUrl && (
             <div>
-            <p>更新後の画像</p>
-            <Image
-              className="w-24 h-24 object-cover rounded-full"
-              src={previewUrl || "/default-avatar.png"}
-              alt="更新後のプロフィール画像"
-              width={96}
-              height={96}
-            />                 
+              <p>更新後の画像</p>
+              <Image
+                className="w-24 h-24 object-cover rounded-full"
+                src={previewUrl || "/default-avatar.png"}
+                alt="更新後のプロフィール画像"
+                width={96}
+                height={96}
+              />
             </div>
           )}
         </div>
@@ -131,7 +131,7 @@ export default function ProfileEditPage() {
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            />
+          />
         </div>
 
         {/* ユーザー名入力 */}
@@ -139,12 +139,12 @@ export default function ProfileEditPage() {
           {/* TODO: ユーザー名の入力フィールド */}
           <label htmlFor="name">ユーザー名</label>
           <input type="text"
-          {...register('name', { required: 'ユーザー名を入力してください' })}
-          className="border border-gray-300 rounded px-3 py-2 w-full"
-        />
-        {/* エラーメッセージ表示 */}
-        {errors.name && <p className="text-red-500">{errors.name.message}</p>}
-        
+            {...register('name', { required: 'ユーザー名を入力してください' })}
+            className="border border-gray-300 rounded px-3 py-2 w-full"
+          />
+          {/* エラーメッセージ表示 */}
+          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+
         </div>
         {/* 送信ボタン */}
         <button type="submit" className="border border-black">更新</button>

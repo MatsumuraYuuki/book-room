@@ -1,23 +1,18 @@
-// components/Pagination.tsxで使用
-export type MetaProps = {
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
-};
+//  複数箇所で使われる共通の型をここで定義
 
+export interface User {
+  id: number;
+  name: string;
+  email: string;
+  imageUrl?: string;
+}
 
 export interface AozoraBook {
   id: number;
-  aozora_book_id: string;
+  aozoraBookId: string;
   title: string;
   author: string;
-  published_date: string;
-  aozora_content_url: string;
-  aozora_card_url: string;
+  publishedDate: string;
+  aozoraContentUrl: string;
+  aozoraCardUrl: string;
 }
-
-export interface SearchFormData {
-  keyword: string;
-}
-
-

@@ -3,7 +3,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { api } from '@/lib/api';
-import { AozoraBook, SearchFormData } from '@/types/common';
+import { AozoraBook } from '@/types/common';
+
+interface SearchFormData {
+  keyword: string;
+}
+
 
 export default function SearchPage() {
   const { register, handleSubmit, formState: { errors } } = useForm<SearchFormData>();
@@ -57,11 +62,11 @@ export default function SearchPage() {
       {/* 検索結果 */}
       <div>
         {mutation.data && mutation.data.map((book) => (
-          <div key={book.aozora_book_id}>
+          <div key={book.aozoraBookId}>
             <p>{book.title}</p>
             <p>{book.author}</p>
             <a
-              href={book.aozora_card_url}
+              href={book.aozoraCardUrl}
               target="_balank"
               rel="noopener noreferrer"
             > 詳細を見る</a>

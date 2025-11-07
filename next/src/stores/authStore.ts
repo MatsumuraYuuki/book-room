@@ -1,6 +1,6 @@
+import axios from 'axios';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import axios from 'axios';
 
 // この情報のみローカルストレージに保存される/saveUserToStorageでセットされる
 interface User {

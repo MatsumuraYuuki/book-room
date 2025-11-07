@@ -1,4 +1,5 @@
 import axios from 'axios';
+import camelcaseKeys from 'camelcase-keys';
 import { useAuthStore } from '../stores/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1';
@@ -31,3 +32,15 @@ api.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
+// レスポンス インターセプターを追加します / https://axios-http.com/ja/docs/interceptors
+api.interceptors.response.use(function onFulfilled(response) {
+    // ステータスコードが 2xx の範囲にある場合、この関数が起動します
+    // レスポンス データの処理
+    response.data = camelcaseKeys(response.data, { deep: true })
+    return response;
+  }, function onRejected(error) {
+    // ステータスコードが 2xx の範囲外の場合、この関数が起動します
+    // レスポンス エラーの処理
+    return Promise.reject(error);
+  });

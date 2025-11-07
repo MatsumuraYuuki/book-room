@@ -303,6 +303,15 @@ rails aozora_books:import
 - ファイル名: kebab-case
 - ESLint/Prettier準拠
 
+### API通信時のキャメルケース/スネークケース変換
+- **TypeScript側の型定義**: camelCaseで定義
+- **APIレスポンス（GET）**: `camelcase-keys`で自動変換（実装済み）
+  - `next/src/lib/api.ts`のresponse interceptorで変換
+  - Rails側の`aozora_book_id` → TypeScript側の`aozoraBookId`
+- **APIリクエスト（POST/PATCH）**: `snakecase-keys`で自動変換（未実装）
+  - 本棚追加機能実装時にrequest interceptorで対応予定
+  - TypeScript側の`aozoraBookId` → Rails側の`aozora_book_id`
+
 ### ディレクトリ構造
 ```
 next/

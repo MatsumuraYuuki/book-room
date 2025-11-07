@@ -1,21 +1,15 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import axios from 'axios';
 import Link from 'next/link';
-import { useAuthStore } from "@/stores/authStore";
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
+import { api } from '@/lib/api';
+import { useAuthStore } from "@/stores/authStore";
+import { User } from '@/types/common';
 
 type Props = {
   params: { id: string }
-}
-
-type User = {
-  name: string,
-  email: string,
-  id: number,
-  image_url?: string
 }
 
 export default function UserPage({ params }: Props) {
@@ -35,7 +29,7 @@ export default function UserPage({ params }: Props) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users/${params.id}`);
+        const response = await api.get(`/users/${params.id}`);
         setUser(response.data)
       } catch (error) {
         console.error('取得失敗:', error);
@@ -57,7 +51,7 @@ export default function UserPage({ params }: Props) {
         <div className="flex items-center space-x-6">
           <Image
             className="w-24 h-24 object-cover rounded-full"
-            src={user.image_url || "/default-avatar.png"}
+            src={user.imageUrl || "/default-avatar.png"}
             alt={user.name}
             width={96}
             height={96}

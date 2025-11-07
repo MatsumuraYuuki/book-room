@@ -1,19 +1,11 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { api } from '@/lib/api';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-
-
-
-type User = {
-  name: string,
-  email: string,
-  id: number,
-  image_url?: string
-}
+import { api } from '@/lib/api';
+import { User } from '@/types/common';
 
 export default function ProfilePage() {
   const [user, setUser] = useState<User | null>(null)
@@ -44,7 +36,7 @@ export default function ProfilePage() {
         <div className="flex items-center space-x-6">
           <Image
             className="w-24 h-24 object-cover rounded-full"
-            src={user.image_url || "/default-avatar.png"}
+            src={user.imageUrl || "/default-avatar.png"}
             alt={user.name}
             width={96}
             height={96}

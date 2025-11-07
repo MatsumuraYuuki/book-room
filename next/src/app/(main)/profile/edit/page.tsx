@@ -4,20 +4,14 @@ import { useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
-import { api } from '@/lib/api';
 import Image from 'next/image';
+import { api } from '@/lib/api';
+import { User } from '@/types/common';
 
 // フォームのデータ型
 interface FormData {
   name: string;
   // imageはファイルなので、ここには含めない
-}
-
-type User = {
-  name: string,
-  email: string,
-  id: number,
-  image_url?: string
 }
 
 
@@ -103,7 +97,7 @@ export default function ProfileEditPage() {
             <p>現在の画像</p>
             <Image
               className="w-24 h-24 object-cover rounded-full"
-              src={user?.image_url || "/default-avatar.png"}
+              src={user?.imageUrl || "/default-avatar.png"}
               alt="現在のプロフィール画像"
               width={96}
               height={96}

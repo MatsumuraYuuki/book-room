@@ -1,5 +1,6 @@
 import axios from 'axios';
 import camelcaseKeys from 'camelcase-keys';
+import snakecaseKeys from 'snakecase-keys';
 import { useAuthStore } from '../stores/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1';
@@ -12,12 +13,13 @@ export const api = axios.create({
   },
 });
 
-// リクエストインターセプター：axiosが提供する「リクエストを送る前に処理を挟む」ためのメソッド。API呼び出しの直前に、自動的に処理を実行する
+// https://axios-http.com/ja/docs/interceptors
+//リクエスト(=送るときの処理) / axiosが提供する「リクエストを送る前に処理を挟む」ためのメソッド
 api.interceptors.request.use(
   (config) => {
     // .getState()で発火した時、全てのstateの状態を取得する
     const { authTokens } = useAuthStore.getState();
-
+    console.log('config:', config);  // ← これを追加
     if (authTokens) {
       // 取得した全てのstateの状態から認証に必要なものだけ取り出す
       config.headers['access-token'] = authTokens.accessToken;
@@ -25,7 +27,12 @@ api.interceptors.request.use(
       config.headers['uid'] = authTokens.uid;
     }
 
-    // return configで「設定を変更（認証情報の追加）変更された」とaxiosは自動で認識するする
+    // railsが理解しやすいスネークデータに変換
+    if (config.data) {
+      config.data = snakecaseKeys(config.data, { deep: true });
+    }    
+
+    // return configで「設定を変更（認証情報の追加）変更された」とaxiosは自動で認識する
     return config;
   },
   (error) => {
@@ -33,7 +40,7 @@ api.interceptors.request.use(
   }
 );
 
-// レスポンス インターセプターを追加します / https://axios-http.com/ja/docs/interceptors
+// レスポンス(=受け取ったときの処理)インターセプターを追加します
 api.interceptors.response.use(function onFulfilled(response) {
     // ステータスコードが 2xx の範囲にある場合、この関数が起動します
     // レスポンス データの処理

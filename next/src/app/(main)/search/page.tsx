@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { api } from '@/lib/api';
 import { AozoraBook } from '@/types/common';
+import AddToBookshelfDropdown from '@/components/features/AddToBookshelfDropdown';
 
 interface SearchFormData {
   keyword: string;
@@ -70,6 +71,7 @@ export default function SearchPage() {
               target="_balank"
               rel="noopener noreferrer"
             > 詳細を見る</a>
+            <AddToBookshelfDropdown aozoraBookId={book.id}/>
           </div>
         ))}
       </div>

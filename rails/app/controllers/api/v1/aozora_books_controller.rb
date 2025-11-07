@@ -4,4 +4,4 @@ class Api::V1::AozoraBooksController < ApplicationController
     books = AozoraBook.search(keyword) # searchはモデルメソッド
     render json: books # データの配列を返す
   end
-end
+end 

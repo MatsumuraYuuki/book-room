@@ -1,12 +1,30 @@
 ja:
   activerecord:
+    models:
+      bookshelf: "本棚"
+      user: "ユーザー"
+      aozora_book: "青空文庫作品"
+
     attributes:
-      article:
-        title: タイトル
-        content: 本文
-  enums:
-    article:
-      status:
-        unsaved: 未保存
-        draft: 下書き
-        published: 公開中
+      bookshelf:
+        user: "ユーザー"
+        aozora_book: "作品"
+        aozora_book_id: "作品"
+        status: "ステータス"
+        completed_at: "読了日時"
+        created_at: "登録日時"
+        updated_at: "更新日時"
+
+    enums:
+      bookshelf:
+        status:
+          unread: "未読"
+          reading: "読書中"
+          completed: "読了"
+
+    errors:
+      models:
+        bookshelf:
+          attributes:
+            aozora_book_id:
+              taken: "この作品は既に本棚に追加されています"

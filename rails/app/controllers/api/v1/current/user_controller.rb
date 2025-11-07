@@ -11,10 +11,11 @@ class Api::V1::Current::UserController < Api::V1::BaseController
       render json: current_user, serializer: CurrentUserSerializer
     else
       render json: { error: "User not updated" }, status: :unprocessable_entity
-
     end
   end
 
+  private
+  
   def user_params
     params.require(:user).permit(:name, :image)
   end

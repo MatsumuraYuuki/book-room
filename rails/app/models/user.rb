@@ -7,11 +7,13 @@ class User < ApplicationRecord
 
   include DeviseTokenAuth::Concerns::User
 
-  validates :name, presence: true
+  has_many :bookshelves  # ← ユーザーは複数の本棚を持つ
 
   # has_one_attached は Active Storage で画像1枚を関連付けるメソッド
   # これで user.image でファイルにアクセスできるようになる
   has_one_attached :image
+
+  validates :name, presence: true
 
   # api/v1/auth/sessions_controller.rbで使用
   def self.guest

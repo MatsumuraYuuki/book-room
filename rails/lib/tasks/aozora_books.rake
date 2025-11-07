@@ -55,7 +55,7 @@ namespace :aozora_books do
                 # データを配列に追加(DBには保存しない)
                 # データのマッピング：CSVの列名とDBのカラム名を対応付けている
                 books_data << {
-                  aozora_book_id: row["作品ID"],
+                  aozora_code: row["作品ID"],
                   title: row["作品名"] || "", # nil対策
                   author: "#{row["姓"] || ""} #{row["名"] || ""}".strip,
                   aozora_content_url: row["XHTML/HTMLファイルURL"],

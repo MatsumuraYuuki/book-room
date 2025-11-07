@@ -71,7 +71,7 @@ end
 青空文庫の全作品データ（約15,000件）を保存
 ```ruby
 create_table "aozora_books", charset: "utf8mb4" do |t|
-  t.string "aozora_book_id", null: false      # CSVの「作品ID」
+  t.string "aozora_code", null: false         # CSVの「作品ID」
   t.string "title", null: false               # CSVの「作品名」
   t.string "author", null: false              # CSVの「姓 名」を結合
   t.string "aozora_content_url", null: false  # CSVの「XHTML/HTMLファイルURL」
@@ -79,8 +79,8 @@ create_table "aozora_books", charset: "utf8mb4" do |t|
   t.date "published_date"                     # CSVの「公開日」(yearではなくdate)
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
-  
-  t.index ["aozora_book_id"], unique: true
+
+  t.index ["aozora_code"], unique: true
   t.index ["title"]
   t.index ["author"]
 end
@@ -108,7 +108,7 @@ add_foreign_key "bookshelves", "aozora_books"
 
 **statusのEnum定義（Rails）:**
 ```ruby
-enum status: { unread: 0, reading: 1, completed: 2 }
+enum :status, { unread: 0, reading: 1, completed: 2 }
 ```
 
 ---
@@ -307,9 +307,9 @@ rails aozora_books:import
 - **TypeScript側の型定義**: camelCaseで定義
 - **APIレスポンス（GET）**: `camelcase-keys`で自動変換（実装済み）
   - `next/src/lib/api.ts`のresponse interceptorで変換
-  - Rails側の`aozora_book_id` → TypeScript側の`aozoraBookId`
-- **APIリクエスト（POST/PATCH）**: `snakecase-keys`で自動変換（未実装）
-  - 本棚追加機能実装時にrequest interceptorで対応予定
+  - Rails側の`aozora_code` → TypeScript側の`aozoraCode`
+- **APIリクエスト（POST/PATCH）**: `snakecase-keys`で自動変換（実装済み）
+  - `next/src/lib/api.ts`のrequest interceptorで対応済み
   - TypeScript側の`aozoraBookId` → Rails側の`aozora_book_id`
 
 ### ディレクトリ構造

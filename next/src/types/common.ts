@@ -9,7 +9,7 @@ export interface User {
 
 export interface AozoraBook {
   id: number;
-  aozoraBookId: string;
+  aozoraCode: string;
   title: string;
   author: string;
   publishedDate: string;

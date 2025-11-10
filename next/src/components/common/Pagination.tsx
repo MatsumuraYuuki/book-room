@@ -1,10 +1,5 @@
 import ReactPaginate from 'react-paginate';
-
-interface MetaProps {
-  currentPage: number;
-  totalPages: number;
-  totalCount: number;
-};
+import { MetaProps } from '@/types/common';
 
 interface PaginationProps {
   meta: MetaProps;

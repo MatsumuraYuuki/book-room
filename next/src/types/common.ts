@@ -1,4 +1,4 @@
-//  複数箇所で使われる共通の型をここで定義
+//  複数のファイルで使われる共通の型をここで定義
 
 export interface User {
   id: number;
@@ -16,3 +16,10 @@ export interface AozoraBook {
   aozoraContentUrl: string;
   aozoraCardUrl: string;
 }
+
+// ページネーションで使用
+export interface MetaProps {
+  currentPage: number;
+  totalPages: number;
+  totalCount: number;
+};

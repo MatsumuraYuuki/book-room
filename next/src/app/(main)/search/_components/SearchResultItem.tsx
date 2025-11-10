@@ -1,5 +1,5 @@
 import { AozoraBook } from '@/types/common';
-import AddToBookshelfDropdown from '@/components/features/AddToBookshelfDropdown';
+import AddToBookshelfDropdown from './AddToBookshelfDropdown';
 
 interface SearchResultItemProps {
   aozoraBook: AozoraBook;

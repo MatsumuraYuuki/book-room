@@ -7,9 +7,8 @@ import { useForm } from 'react-hook-form';
 import { api } from '@/lib/api';
 import Pagination from '@/components/common/Pagination';
 import { AozoraBook, MetaProps } from '@/types/common';
-import SearchResultItem from '@/components/features/SearchResultItem';
+import SearchResultItem from './_components/SearchResultItem';
 import { useState, useEffect } from "react";
-
 
 interface SearchResponse {
   data: AozoraBook[];
@@ -22,13 +21,13 @@ interface SearchFormData {
 
 export default function SearchPage() {
   const [showLoading, setShowLoading] = useState(false);
-  const { register, handleSubmit, formState: { errors }, reset  } = useForm<SearchFormData>();
+  const { register, handleSubmit, formState: { errors }, reset } = useForm<SearchFormData>();
   const searchParams = useSearchParams()
   const router = useRouter()
 
   // 型をジェネリクスで指定
   const mutation = useMutation<SearchResponse, Error, { keyword: string, page: number }>({
-    mutationFn: async ({keyword, page}) => {
+    mutationFn: async ({ keyword, page }) => {
       const response = await api.get(`aozora_books?keyword=${keyword}&page=${page}`)
       return response.data;
     }
@@ -43,35 +42,35 @@ export default function SearchPage() {
     const keyword = searchParams.get("keyword")
     const page = searchParams.get("page") || "1"
     if (keyword) {
-      mutation.mutate({keyword, page: Number(page)})
+      mutation.mutate({ keyword, page: Number(page) })
       reset({ keyword: keyword })  // フォームの値をリセット（更新）
     }
   }, [searchParams, reset]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // ロード時間が1秒以上の時howLoadingがtrueになる
   useEffect(() => {
-      if (mutation.isPending) {
-        // 1秒後にローディング表示フラグを立てる
-        const timer = setTimeout(() => {
-          setShowLoading(true)
-        }, 1000)
-
-        // クリーンアップ（タイマー解除）
-        return () => clearTimeout(timer)
-      } else {
-        // 読み込み完了したらフラグを下ろす
-        setShowLoading(false)
-      }
-    }, [mutation.isPending])
+    if (mutation.isPending) {
+      // 1秒後にローディング表示フラグを立てる
+      const timer = setTimeout(() => {
+        setShowLoading(true)
+      }, 1000)
+      // クリーンアップ（タイマー解除）
+      return () => clearTimeout(timer)
+    } else {
+      // 読み込み完了したらフラグを下ろす
+      setShowLoading(false)
+    }
+  }, [mutation.isPending])
 
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold mb-6">作品を検索</h1>
       <p className="text-sm text-gray-600 mb-2">
-        作品名、著者名を入力して検索してください。<br/>
-        例えば… 夏目漱石 や 羅生門 や ドストエフスキー など。<br/>
+        作品名、著者名を入力して検索してください。<br />
+        例えば… 夏目漱石 や 羅生門 や ドストエフスキー など。<br />
         複数検索する場合、間にはスペースを入れるようにしてください。
       </p>
-      
+
       {/* 入力フォーム */}
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
 
@@ -96,7 +95,7 @@ export default function SearchPage() {
           <div className="mb-2 text-gray-700">
             検索結果: {mutation.data.meta.totalCount}件
           </div>
-        )}        
+        )}
 
         {/* 検索中の表示 */}
         {showLoading && mutation.isPending && (
@@ -114,25 +113,25 @@ export default function SearchPage() {
             <p>検索結果が見つかりませんでした</p>
             <p className="text-sm mt-2">別のキーワードで検索してみてください</p>
           </div>
-        )} 
+        )}
 
         {/* 検索結果の表示 */}
         {mutation.data?.data && mutation.data?.data.map((aozoraBook, index) => (
-          <SearchResultItem 
+          <SearchResultItem
             key={aozoraBook.id}
             aozoraBook={aozoraBook}
             isLast={index === mutation.data.data.length - 1}
           />
         ))}
         {mutation.data?.meta && (
-          <Pagination 
+          <Pagination
             meta={mutation.data.meta}
             onPageChange={(event) => {
               const keyword = searchParams.get("keyword")
               router.push(`/search?keyword=${keyword}&page=${event.selected + 1}`)
             }}
           />
-        )}        
+        )}
       </div>
     </div>
   );

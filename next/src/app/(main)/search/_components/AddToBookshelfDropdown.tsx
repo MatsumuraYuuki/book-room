@@ -52,20 +52,20 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
     }
   })
   useEffect(() => {
-  function handleClickOutside(event: MouseEvent) {
-    if (
-      dropdownRef.current &&
-      !dropdownRef.current.contains(event.target as Node)
-    ) {
-      setIsOpen(false)
+    function handleClickOutside(event: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false)
+      }
     }
-  }
 
-  document.addEventListener('mousedown', handleClickOutside)
-  return () => {
-    document.removeEventListener('mousedown', handleClickOutside)
-  }
-}, [])
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
 
   return (
     <div className='relative inline-block' ref={dropdownRef}>
@@ -74,7 +74,7 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
         onClick={clickHandler}
         className='flex items-center gap-1 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors'
       >
-        <BookmarkIcon className="h-6 w-6"/>
+        <BookmarkIcon className="h-6 w-6" />
         本棚に登録
       </button>
       {isOpen && (

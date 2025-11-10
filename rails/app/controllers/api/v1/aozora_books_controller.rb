@@ -1,5 +1,5 @@
 class Api::V1::AozoraBooksController < ApplicationController
-  include Pagination  # /concerns/pagination.rbを呼び出して利用
+  include Pagination # /concerns/pagination.rbを呼び出して利用
 
   def index
     keyword = params[:keyword]
@@ -7,7 +7,7 @@ class Api::V1::AozoraBooksController < ApplicationController
     books = AozoraBook.search(keyword, page)
     render json: {
       data: books,
-      meta: pagination(books)
+      meta: pagination(books),
     }
   end
-end 
+end

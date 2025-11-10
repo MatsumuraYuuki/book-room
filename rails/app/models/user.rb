@@ -7,7 +7,7 @@ class User < ApplicationRecord
 
   include DeviseTokenAuth::Concerns::User
 
-  has_many :bookshelves  # ← ユーザーは複数の本棚を持つ
+  has_many :bookshelves, dependent: :destroy # ← ユーザーは複数の本棚を持つ
 
   # has_one_attached は Active Storage で画像1枚を関連付けるメソッド
   # これで user.image でファイルにアクセスできるようになる

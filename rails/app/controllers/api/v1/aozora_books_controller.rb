@@ -1,7 +1,13 @@
 class Api::V1::AozoraBooksController < ApplicationController
+  include Pagination  # /concerns/pagination.rbを呼び出して利用
+
   def index
     keyword = params[:keyword]
-    books = AozoraBook.search(keyword) # searchはモデルメソッド
-    render json: books # データの配列を返す
+    page = params[:page]
+    books = AozoraBook.search(keyword, page)
+    render json: {
+      data: books,
+      meta: pagination(books)
+    }
   end
 end 

@@ -14,7 +14,7 @@ class AozoraBook < ApplicationRecord
             presence: true
 
   # /api/v1/aozora_books_controller.rbから引数keywordを受け取っている
-  def self.search(keyword)
+  def self.search(keyword, page = １)
     return AozoraBook.none if keyword.blank?
 
     # スペースで分割
@@ -28,10 +28,10 @@ class AozoraBook < ApplicationRecord
       # %#{keyword}%で部分一致検索
       query = query.where(
         "REPLACE(title, ' ', '') LIKE ? OR REPLACE(author, ' ', '')  LIKE ?",
-       "%#{keyword}%",
-       "%#{keyword}%"
+        "%#{keyword}%",
+        "%#{keyword}%"
       )
     end
-    query.limit(10)
+    query.page(page).per(12)
   end
 end

@@ -33,7 +33,7 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
     end
 
     context "データを取得できない時" do
-      expected_empty_result = {"data"=>[], "meta"=>{"current_page"=>1, "total_count"=>0, "total_pages"=>0}}
+      expected_empty_result = { "data" => [], "meta" => { "current_page" => 1, "total_count" => 0, "total_pages" => 0 } }
 
       it "空文字で空配列が返ること" do
         get(api_v1_aozora_books_path, params: { keyword: "" })

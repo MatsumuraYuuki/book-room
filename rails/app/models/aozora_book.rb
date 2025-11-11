@@ -3,7 +3,7 @@ class AozoraBook < ApplicationRecord
   has_many :users, through: :bookshelves
 
   # バリデーション
-  validates :aozora_book_id,
+  validates :aozora_code,
             presence: true,
             uniqueness: true
   validates :title,
@@ -15,7 +15,7 @@ class AozoraBook < ApplicationRecord
 
   # /api/v1/aozora_books_controller.rbから引数keywordを受け取っている
   def self.search(keyword, page = 1)
-    return AozoraBook.none if keyword.blank?
+    return AozoraBook.none.page(page).per(12) if keyword.blank?
 
     # スペースで分割
     keywords = keyword.split(/[\s　]+/)

@@ -2,6 +2,7 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
   before_action :authenticate_user! # 認証必須
 
   def create
+    # current_userに紐づいた新しいBookshelfレコードを作る
     bookshelf = current_user.bookshelves.build(bookshelf_params)
     if bookshelf.save
       render json: bookshelf, status: :created
@@ -11,7 +12,6 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
   end
 
   private
-
     def bookshelf_params
       params.require(:bookshelf).permit(:aozora_book_id, :status)
     end

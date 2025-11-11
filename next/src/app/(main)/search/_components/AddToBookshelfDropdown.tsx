@@ -58,8 +58,6 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
     },
     onError: (error) => {
       // ❌ エラー時の処理をここに書く
-      console.error("❌ 登録に失敗:", error);
-
       if (axios.isAxiosError(error) && error.response) {
         // サーバーからレスポンスがある場合 / AxiosErrorオブジェクト構造からエラー取り出す
         const errorMessage = error.response.data.errors?.[0] || "本棚への追加に失敗しました";

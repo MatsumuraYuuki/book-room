@@ -8,8 +8,8 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
       create(:aozora_book, :natsume_author)
     end
 
-    context "データを取得できるとき時" do
-      it "単一キーワード検索が成功すること" do
+    context "正常系" do
+      it "単一キーワード検索が成功する" do
         get(api_v1_aozora_books_path, params: { keyword: "こころ" })
 
         res = response.parsed_body
@@ -21,7 +21,7 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
         expect(res["data"][1]["author"]).to eq("秋田 滋")
       end
 
-      it "複数キーワード検索が成功すること" do
+      it "複数キーワード検索が成功する" do
         get(api_v1_aozora_books_path, params: { keyword: "こころ 夏目" })
 
         res = response.parsed_body
@@ -32,24 +32,24 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
       end
     end
 
-    context "データを取得できない時" do
+    context "異常系" do
       expected_empty_result = { "data" => [], "meta" => { "current_page" => 1, "total_count" => 0, "total_pages" => 0 } }
 
-      it "空文字で空配列が返ること" do
+      it "空文字で空配列が返る" do
         get(api_v1_aozora_books_path, params: { keyword: "" })
 
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body).to eq(expected_empty_result)  # 空配列と等しい
       end
 
-      it "パラメータなしで空配列が返ること" do
+      it "パラメータなしで空配列が返る" do
         get(api_v1_aozora_books_path)
 
         expect(response).to have_http_status(:ok)
         expect(response.parsed_body).to eq(expected_empty_result)  # 空配列と等しい
       end
 
-      it "存在しない作品で空配列が返ること" do
+      it "存在しない作品で空配列が返る" do
         get(api_v1_aozora_books_path, params: { keyword: "こころvfsejf" })
 
         expect(response).to have_http_status(:ok)

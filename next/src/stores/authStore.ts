@@ -49,7 +49,7 @@ export const useAuthStore = create<AuthStore>()(
       error: null, 
       authTokens: null,
       
-      // アクション           //userはuser: userの省略記法
+      // アクション            　user, はuser: userの省略記法
       setUser: (user) => set({ user, isLoggedIn: !!user }),
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),

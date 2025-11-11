@@ -1,6 +1,7 @@
 // next/src/app/sign-in/page.tsx
 'use client';
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -13,7 +14,7 @@ interface FormData {
 
 export default function SignInPage() {
   // 認証情報を取得
-  const {  signIn, loading, error, isLoggedIn, guestSignIn, user } = useAuthStore()
+  const { signIn, loading, error, isLoggedIn, guestSignIn, user } = useAuthStore()
   const router = useRouter();
 
   // フォームの設定
@@ -29,23 +30,31 @@ export default function SignInPage() {
   // フォームが送信された時の処理
   const onSubmit = async (data: FormData) => {
     const success = await signIn(data.email, data.password);
-    if (success && user) {
-      router.push('/profile'); // サインイン成功時はプロフィールページに移動
+
+    console.log('success:', success);
+    console.log('user:', user);
+    console.log('条件判定:', success && user);
+
+    if (success) {
+      router.push('/profile');
+      toast.success('ログインに成功しました')
     }
   };
-   
+
   // ゲストログインボタンが押された時の処理
   const handleGuestSignIn = async () => {
     const success = await guestSignIn();
-    if (success && user) {
-      router.push('/profile'); // ゲストログイン成功時はプロフィールページに移動
+    if (success) {
+      router.push('/profile');
+      toast.success('ログインに成功しました')
+
     }
   };
 
   return (
     <>
       <h1 className="text-2xl font-bold text-center mb-6">サインイン</h1>
-      
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* メールアドレス入力 */}
         <div>
@@ -113,7 +122,7 @@ export default function SignInPage() {
         <div className="text-center mb-3">
           <p className="text-gray-600 text-sm">または</p>
         </div>
-        
+
         <button
           onClick={handleGuestSignIn}
           disabled={loading}
@@ -121,7 +130,7 @@ export default function SignInPage() {
         >
           {loading ? 'ログイン中...' : 'ゲストとしてログイン'}
         </button>
-        
+
         <p className="text-xs text-gray-500 text-center mt-2">
           アカウント登録不要で機能をお試しいただけます
         </p>

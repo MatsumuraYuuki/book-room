@@ -1,9 +1,11 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import toast from "react-hot-toast";
 import { BookmarkIcon } from '@heroicons/react/24/outline'
 import { api } from '@/lib/api'
 import { useMutation } from '@tanstack/react-query';
+import axios from 'axios';
 
 interface AddToBookshelfDropdownProps {
   aozoraBookId: number
@@ -18,7 +20,6 @@ interface BookshelfResponse {
   createdAt: string;
   updatedAt: string;
 }
-
 
 // 親コンポーネントからprops.aozoraBookIdを受け取る
 export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfDropdownProps) {
@@ -49,19 +50,42 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
         }
       })
       return response.data;
+    },
+    onSuccess: (data) => {
+      // ✅ 成功時の処理をここに書く
+       console.log("✅ 登録に成功:", data);
+       toast.success('本棚に追加しました')
+    },
+    onError: (error) => {
+      // ❌ エラー時の処理をここに書く
+      console.error("❌ 登録に失敗:", error);
+
+      if (axios.isAxiosError(error) && error.response) {
+        // サーバーからレスポンスがある場合 / AxiosErrorオブジェクト構造からエラー取り出す
+        const errorMessage = error.response.data.errors?.[0] || "本棚への追加に失敗しました";
+        toast.error(errorMessage)
+      } else {
+        // ネットワークエラーなど
+        toast.error('ネットワークエラーが発生しました');
+      }
     }
   })
+
+  // メニュー外クリックでドロップダウンを閉じる処理
   useEffect(() => {
+    // ドロップダウン外をクリックしたときに実行される関数
     function handleClickOutside(event: MouseEvent) {
+      // dropdownRefが存在し、かつクリック対象がその中に含まれていない場合
       if (
         dropdownRef.current &&
         !dropdownRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false)
+        setIsOpen(false)  // ドロップダウンを閉じる
       }
     }
-
+    // マウスクリックイベントを監視
     document.addEventListener('mousedown', handleClickOutside)
+    // クリーンアップ：コンポーネントがアンマウントされたらイベントリスナーを解除
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
@@ -97,4 +121,3 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
     </div>
   );
 }
-

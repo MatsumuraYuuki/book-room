@@ -2,6 +2,7 @@
 'use client';
 
 import { useForm } from 'react-hook-form';
+import toast from 'react-hot-toast'
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
@@ -35,8 +36,10 @@ export default function SignUpPage() {
   // フォームが送信された時の処理
   const onSubmit = async (data: FormData) => {
     const success = await signUp(data.name, data.email, data.password);
-    if (success && user) {
+    if (success) {
       router.push('/profile'); // サインアップ成功時はプロフィールページに移動
+      toast.success('ログインに成功しました')
+      
     }
   };
 

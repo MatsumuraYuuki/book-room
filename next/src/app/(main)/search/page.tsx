@@ -42,7 +42,7 @@ export default function SearchPage() {
     const keyword = searchParams.get("keyword")
     const page = searchParams.get("page") || "1"
     if (keyword) {
-      mutation.mutate({ keyword, page: Number(page) })
+      mutation.mutate({ keyword, page: Number(page) }) //引数のpageは文字列なのでint形式に変更
       reset({ keyword: keyword })  // フォームの値をリセット（更新）
     }
   }, [searchParams, reset]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -136,4 +136,3 @@ export default function SearchPage() {
     </div>
   );
 }
-

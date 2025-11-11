@@ -2,6 +2,7 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { Toaster } from "react-hot-toast";
 import { Header } from '@/components/common/Header';
 import { ReactQueryProvider } from '@/components/providers/react-query-provider';
 
@@ -32,6 +33,7 @@ export default function RootLayout({
         <ReactQueryProvider>
           <Header />
           {children}
+          <Toaster position="bottom-left" />
         </ReactQueryProvider>
       </body>
     </html>

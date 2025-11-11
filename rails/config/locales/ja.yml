@@ -27,4 +27,4 @@ ja:
         bookshelf:
           attributes:
             aozora_book_id:
-              taken: "この作品は既に本棚に追加されています"
+              taken: "作品は既に本棚に追加されています"

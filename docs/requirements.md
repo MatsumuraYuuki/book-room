@@ -17,6 +17,8 @@
 - Zustand（状態管理）
 - axios（HTTPクライアント）
 - React Hook Form（フォーム管理）
+- react-query
+- react-hot-toast（通知表示）
 
 ### バックエンド
 - Ruby 3.2.2
@@ -37,18 +39,19 @@
 ### ✅ 実装済み
 - ユーザー新規登録（DeviseTokenAuth）
 - ログイン・ログアウト
+- 作品検索・一覧画面（ページネーション、本棚追加機能含む）
+- マイページ・プロフィール編集
+- 通知バー機能（本棚追加、認証成功/失敗時の通知表示）
 
 ### ⬜ 未実装（フェーズ1 - これから実装）
-1. 作品検索・一覧画面
-2. 本棚管理機能
-3. ビューアー機能
-4. マイページ・プロフィール編集
+1. 本棚管理機能（一覧・削除・ステータス変更）
+2. ビューアー機能
 
 ---
 
 ## データベース設計
 
-### 1. users テーブル（既存）
+### 1. users テーブル（既存）✅
 ```ruby
 create_table "users", charset: "utf8mb4" do |t|
   t.string "provider", default: "email", null: false
@@ -66,31 +69,31 @@ create_table "users", charset: "utf8mb4" do |t|
 end
 ```
 
-### 2. aozora_books テーブル（新規作成）
+### 2. aozora_books テーブル（新規作成）✅
 青空文庫の全作品データ（約15,000件）を保存
 ```ruby
 create_table "aozora_books", charset: "utf8mb4" do |t|
-  t.string "title", null: false              # 作品タイトル
-  t.string "author", null: false             # 作者名
-  t.string "aozora_content_url", null: false # 本文HTML URL
-  t.string "aozora_card_url"                 # 図書カード URL
-  t.integer "character_count"                # 文字数
-  t.integer "estimated_reading_time"         # 推定読書時間（分）
-  t.integer "published_year"                 # 公開年
+  t.string "aozora_code", null: false         # CSVの「作品ID」
+  t.string "title", null: false               # CSVの「作品名」
+  t.string "author", null: false              # CSVの「姓 名」を結合
+  t.string "aozora_content_url", null: false  # CSVの「XHTML/HTMLファイルURL」
+  t.string "aozora_card_url"                  # CSVの「図書カードURL」
+  t.date "published_date"                     # CSVの「公開日」(yearではなくdate)
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
-  
+
+  t.index ["aozora_code"], unique: true
   t.index ["title"]
   t.index ["author"]
 end
 ```
 
-### 3. bookshelves テーブル（新規作成）
+### 3. bookshelves テーブル（新規作成）✅
 ユーザーが追加した作品の読書管理
 ```ruby
 create_table "bookshelves", charset: "utf8mb4" do |t|
   t.bigint "user_id", null: false
-  t.bigint "aozora_book_id", null: false
+  t.references :aozora_book, null: false, foreign_key: true #「外部キー制約を自動で追加」
   t.integer "status", default: 0, null: false  # 0:未読, 1:読書中, 2:読了
   t.datetime "completed_at"                     # 読了日時
   t.datetime "created_at", null: false
@@ -107,7 +110,7 @@ add_foreign_key "bookshelves", "aozora_books"
 
 **statusのEnum定義（Rails）:**
 ```ruby
-enum status: { unread: 0, reading: 1, completed: 2 }
+enum :status, { unread: 0, reading: 1, completed: 2 }
 ```
 
 ---
@@ -117,26 +120,41 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 ### 認証系（実装済み）
 | メソッド | エンドポイント | 説明 |
 |---------|--------------|------|
-| POST | `/api/auth` | 新規登録 |
-| POST | `/api/auth/sign_in` | ログイン |
-| DELETE | `/api/auth/sign_out` | ログアウト |
+| POST | `/api/auth` | 新規登録 |✅
+| POST | `/api/auth/sign_in` | ログイン |✅
+| DELETE | `/api/auth/sign_out` | ログアウト |✅
 
 ### ユーザー系（未実装）
 | メソッド | エンドポイント | 説明 | リクエスト | レスポンス |
 |---------|--------------|------|-----------|-----------|
-| GET | `/api/users/:id` | プロフィール取得 | - | `{ id, name, image, email }` |
-| PATCH | `/api/users/:id` | プロフィール更新 | `{ name, image }` | `{ id, name, image }` |
+| GET | `/api/users/:id` | プロフィール取得 | - | `{ id, name, image, email }` |✅
+| PATCH | `/api/users/:id` | プロフィール更新 | `{ name, image }` | `{ id, name, image }` |✅
 
-### 青空文庫作品系（未実装）
+### 青空文庫作品系
 | メソッド | エンドポイント | 説明 | クエリパラメータ | レスポンス |
 |---------|--------------|------|----------------|-----------|
-| GET | `/api/aozora_books` | 作品検索・一覧 | `?title=xxx&author=xxx` | 最大10件の配列 |
-| GET | `/api/aozora_books/:id/content` | 本文取得 | - | `{ content }` (HTML文字列) |
+| GET | `/api/v1/aozora_books` | 作品検索・一覧 | `?keyword=xxx&page=1` | `{ data: [...], meta: {...} }` |✅
+| GET | `/api/v1/aozora_books/:id/content` | 本文取得 | - | `{ content }` (HTML文字列) |
 
 **検索仕様:**
-- タイトル・作者名での部分一致検索（LIKE検索）
-- 結果は最大10件まで
-- ページネーションなし
+- 1つの検索ボックスでタイトル・作者名を同時検索（LIKE検索）
+- スペース区切りで複数キーワード指定可能（例："こころ 夏目漱石"）
+- 結果は12件/ページ
+- ページネーションあり（kaminari使用）✅
+
+**レスポンス形式:**
+```json
+{
+  "data": [
+    { "id": 1, "title": "こころ", "author": "夏目漱石", ... }
+  ],
+  "meta": {
+    "currentPage": 1,
+    "totalPages": 10,
+    "totalCount": 120
+  }
+}
+```
 
 **本文取得の処理:**
 1. DBから`aozora_content_url`を取得
@@ -148,7 +166,7 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 | メソッド | エンドポイント | 説明 | リクエスト | レスポンス |
 |---------|--------------|------|-----------|-----------|
 | GET | `/api/bookshelves` | 本棚一覧 | クエリ: `?status=xxx` | 配列 |
-| POST | `/api/bookshelves` | 本棚に追加 | `{ aozora_book_id }` | `{ id, status, ... }` |
+| POST | `/api/bookshelves` | 本棚に追加 | `{ aozora_book_id, status }` | `{ id, status, ... }` |
 | GET | `/api/bookshelves/:id` | 特定作品情報 | - | `{ id, status, aozora_book, ... }` |
 | PATCH | `/api/bookshelves/:id` | ステータス更新 | `{ status }` | `{ id, status }` |
 | DELETE | `/api/bookshelves/:id` | 本棚から削除 | - | `204 No Content` |
@@ -161,29 +179,62 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 |-------|-----|------|---------|
 | 新規登録 | `/signup` | ユーザー登録 | ✅ 実装済み |
 | ログイン | `/login` | ログイン | ✅ 実装済み |
-| 作品検索・一覧 | `/books` | 検索 + 本棚追加 | ⬜ 未実装 |
+| 作品検索・一覧 | `/search` | 検索 + 本棚追加 + ページネーション | ✅ 実装済み |
 | 本棚 | `/my-books` | 追加済み作品一覧 | ⬜ 未実装 |
 | ビューアー | `/reader/:id` | 作品を読む | ⬜ 未実装 |
-| マイページ | `/profile` | プロフィール表示 | ⬜ 未実装 |
-| プロフィール編集 | `/profile/edit` | プロフィール編集 | ⬜ 未実装 |
+| マイページ | `/profile` | プロフィール表示 | ⬜ 一部実装済み |
+| プロフィール編集 | `/profile/edit` | プロフィール編集 | ⬜ 一部実装済み |
 
 ---
 
 ## 機能詳細仕様
 
-### 1. 作品検索・一覧画面（/books）
+### 1. 作品検索・一覧画面（/search）✅
 
 **機能:**
 - 作品名・作者名での検索フォーム
-- 検索結果一覧表示（最大10件）
+- 検索結果一覧表示（12件/ページ）
+- ページネーション機能（react-paginate使用）
+- 検索結果件数表示（「検索結果: 120件」）
+- 空文字はReact Hook Formで対処
 - 各作品に「詳細を見る」ボタン（青空文庫図書カードへ外部リンク）
-- 各作品に「本棚に追加」ボタン
+- 各作品に「▼ 本棚に追加」ドロップダウンボタン
+  - 未読として追加
+  - 読書中として追加
+  - 読了として追加
+  - ユーザーが読書状況（status）を選択して本棚に追加できる
+- ローディング表示（1秒以上かかる場合のみ表示してちらつき防止）
+- 検索結果0件時のメッセージ表示
 
 **表示情報:**
 - 作品タイトル
 - 作者名
-- 推定読書時間
-- 文字数
+- 総件数
+
+**UI/レイアウト:**
+- リスト形式で表示（カード形式ではない）
+- 各作品は区切り線で分離
+- タイトルを大きく表示（font-bold）
+- 著者名はグレーで表示
+- ボタンは各作品の下部に配置
+- レスポンシブ対応（スマホでも見やすい）
+- 理由: 青空文庫には表紙画像がなく、タイトル・著者が主な情報のため、シンプルなリスト形式が文学作品の品格に合う
+<!-- リスト形式例
+  ┌─────────────────────────────────────────────┐
+  │ 人間失格                                      │
+  │ 太宰治                                        │
+  │ [詳細を見る] [▼ 本棚に追加]                   │
+  │                └→ 未読として追加              │
+  │                └→ 読書中として追加            │
+  │                └→ 読了として追加              │
+  └─────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────┐
+  │ こころ                                        │
+  │ 夏目漱石                                      │
+  │ [詳細を見る] [▼ 本棚に追加]                   │
+  └─────────────────────────────────────────────┘
+ -->
 
 ### 2. 本棚画面（/my-books）
 
@@ -228,13 +279,12 @@ enum status: { unread: 0, reading: 1, completed: 2 }
 
 ### ✅ 実装する
 - 青空文庫CSV（15,000作品）を全件DBに登録
-- 検索結果は最大10件のみ表示
+- 検索結果は12件/ページ（ページネーションあり）✅
 - 本文は都度青空文庫から取得（DBに保存しない）
 - ビューアーは全文表示
 
 ### ❌ 実装しない
 - 作品詳細画面（/books/:id）
-- ページネーション
 - 読書進捗管理（何%読んだかなど）
 - しおり機能
 - フェーズ2の機能（感想投稿、いいね、コメント、おすすめ、統計）
@@ -273,20 +323,38 @@ rails aozora_books:import
 - ファイル名: kebab-case
 - ESLint/Prettier準拠
 
+### API通信時のキャメルケース/スネークケース変換
+- **TypeScript側の型定義**: camelCaseで定義
+- **APIレスポンス（GET）**: `camelcase-keys`で自動変換（実装済み）
+  - `next/src/lib/api.ts`のresponse interceptorで変換
+  - Rails側の`aozora_code` → TypeScript側の`aozoraCode`
+- **APIリクエスト（POST/PATCH）**: `snakecase-keys`で自動変換（実装済み）
+  - `next/src/lib/api.ts`のrequest interceptorで対応済み
+  - TypeScript側の`aozoraBookId` → Rails側の`aozora_book_id`
+
 ### ディレクトリ構造
 ```
 next/
 ├── src/
 │   ├── app/          # Next.js App Router
+│   │   ├── (main)/search/
+│   │   │   ├── page.tsx
+│   │   │   └── _components/  # ページ固有コンポーネント
+│   │   │       ├── SearchResultItem.tsx
+│   │   │       └── AddToBookshelfDropdown.tsx
 │   ├── components/   # 共通コンポーネント
+│   │   ├── common/   # 汎用コンポーネント（Pagination等）
+│   │   └── features/ # 機能別コンポーネント
 │   ├── lib/          # ユーティリティ
 │   └── types/        # TypeScript型定義
 
 rails/
 ├── app/
-│   ├── controllers/api/  # APIコントローラー
+│   ├── controllers/
+│   │   ├── api/v1/   # APIコントローラー
+│   │   └── concerns/ # 共通処理（Pagination等）
 │   ├── models/
-│   └── serializers/      # JSONレスポンス整形
+│   └── serializers/  # JSONレスポンス整形
 ```
 
 ---
@@ -294,15 +362,15 @@ rails/
 ## 次のステップ
 
 ### 優先実装順序
-1. aozora_booksテーブル作成 + マイグレーション
-2. bookshelvesテーブル作成 + マイグレーション
-3. 青空文庫CSVインポートrakeタスク
-4. 作品検索API実装
-5. 作品検索・一覧画面実装
-6. 本棚追加API実装
+1. aozora_booksテーブル作成 + マイグレーション✅
+2. bookshelvesテーブル作成 + マイグレーション✅
+3. 青空文庫CSVインポートrakeタスク✅
+4. 作品検索API実装✅
+5. 作品検索・一覧画面実装（ページネーション含む）✅
+6. 本棚追加API実装 ✅
 7. 本棚一覧API実装
 8. 本棚画面実装
 9. 本文取得API実装
 10. ビューアー画面実装
-11. プロフィールAPI実装
-12. マイページ実装
+11. プロフィールAPI実装✅
+12. マイページ実装✅

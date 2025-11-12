@@ -2,8 +2,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from '@/components/Header';
-import { Navigation } from '@/components/Navigation';
+import { Toaster } from "react-hot-toast";
+import { Header } from '@/components/common/Header';
+import { ReactQueryProvider } from '@/components/providers/react-query-provider';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -29,19 +30,11 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <div className="min-h-screen bg-white">
-            <Header />
-            <Navigation />
-            
-            <main className="md:pl-64 flex flex-col min-h-screen pt-16">
-              <div className="flex-1 p-4 md:p-8">
-                {children}
-              </div>
-
-              {/* モバイル用の下部余白 */}
-              <div className="h-20 md:h-0"></div>
-            </main>
-          </div>
+        <ReactQueryProvider>
+          <Header />
+          {children}
+          <Toaster position="bottom-left" />
+        </ReactQueryProvider>
       </body>
     </html>
   );

@@ -29,8 +29,8 @@ class DeviseTokenAuthCreateUsers < ActiveRecord::Migration[7.2]
 
       ## User Info
       t.string :name
-      t.string :nickname
-      t.string :image
+      # t.string :nickname  不要なためコメントアウト
+      # t.string :image  Active Storageが管理するためコメントアウト
       t.string :email
 
       ## Tokens

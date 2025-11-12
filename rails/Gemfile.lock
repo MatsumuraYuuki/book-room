@@ -337,6 +337,7 @@ GEM
       lint_roller (~> 1.1)
       rubocop (~> 1.72, >= 1.72.1)
     ruby-progressbar (1.13.0)
+    rubyzip (3.2.1)
     securerandom (0.4.1)
     stringio (3.1.7)
     thor (1.4.0)
@@ -390,6 +391,7 @@ DEPENDENCIES
   rubocop-rails
   rubocop-rails-omakase
   rubocop-rspec
+  rubyzip
   tzinfo-data
 
 BUNDLED WITH

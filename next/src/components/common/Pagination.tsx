@@ -1,7 +1,7 @@
 import ReactPaginate from 'react-paginate';
 import { MetaProps } from '@/types/common';
 
-type PaginationProps = {
+interface PaginationProps {
   meta: MetaProps;
   onPageChange: (event: { selected: number }) => void;
 };

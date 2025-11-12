@@ -47,7 +47,6 @@ export default function SignInPage() {
     if (success) {
       router.push('/profile');
       toast.success('ログインに成功しました')
-
     }
   };
 

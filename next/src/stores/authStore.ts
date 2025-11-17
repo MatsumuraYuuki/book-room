@@ -1,13 +1,8 @@
+import { User } from '@/types/common';
+import camelcaseKeys from 'camelcase-keys';
 import axios from 'axios';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-
-// この情報のみローカルストレージに保存される/saveUserToStorageでセットされる
-interface User {
-  id: number;
-  name: string;
-  email: string;
-}
 
 interface AuthTokens {
   accessToken: string;
@@ -82,8 +77,10 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           const userInfo = response.data.data;
+          //取得したuserをcamelcaseに変換
+          const camelCasedUser = camelcaseKeys(userInfo, { deep: true });
 
-          setUser(userInfo)
+          setUser(camelCasedUser);
           setLoading(false);
           return true;
         } catch (error) {
@@ -115,8 +112,10 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           const userInfo = response.data.data;
+          //取得したuserをcamelcaseに変換
+          const camelCasedUser = camelcaseKeys(userInfo, { deep: true });
 
-          setUser(userInfo)
+          setUser(camelCasedUser);
           setLoading(false);
           return true;
         } catch (error) {
@@ -145,8 +144,10 @@ export const useAuthStore = create<AuthStore>()(
           }
 
           const userInfo = response.data.data;
+          //取得したuserをcamelcaseに変換
+          const camelCasedUser = camelcaseKeys(userInfo, { deep: true });
 
-          setUser(userInfo)
+          setUser(camelCasedUser);      
           setLoading(false);
           return true;
         } catch (error) {

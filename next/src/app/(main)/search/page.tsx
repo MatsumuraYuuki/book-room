@@ -25,7 +25,7 @@ export default function SearchPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  // 型をジェネリクスで指定
+  // useMutation関数の【呼び出し】＋ 型をジェネリクスで指定　
   const mutation = useMutation<SearchResponse, Error, { keyword: string, page: number }>({
     mutationFn: async ({ keyword, page }) => {
       const response = await api.get(`aozora_books?keyword=${keyword}&page=${page}`)

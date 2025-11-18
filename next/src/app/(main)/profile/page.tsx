@@ -37,7 +37,7 @@ export default function ProfilePage() {
           <Image
             className="w-24 h-24 object-cover rounded-full"
             src={user.imageUrl || "/default-avatar.png"}
-            alt={user.name}
+            alt={user.name || "ユーザー"}
             width={96}
             height={96}
           />

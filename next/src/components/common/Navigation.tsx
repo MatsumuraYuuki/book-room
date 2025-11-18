@@ -7,7 +7,7 @@ import {
   ClockIcon,      // タイムライン用
   MagnifyingGlassIcon,  // 本を探す用
   UserIcon,  //ユーザー用
-  BookOpenIcon  // 本棚用
+  Squares2X2Icon  // 本棚用
 } from '@heroicons/react/24/outline';
 
 // ナビゲーション項目の型定義
@@ -22,7 +22,7 @@ const navItems: NavItem[] = [
   { name: 'プロフィール', href: '/profile', icon: UserIcon },
   { name: 'タイムライン', href: '/timeline', icon: ClockIcon },
   { name: '本を探す', href: '/search', icon: MagnifyingGlassIcon },
-  { name: '本棚', href: '/my-books', icon: BookOpenIcon },
+  { name: '本棚', href: '/my-books', icon: Squares2X2Icon },
 ];
 
 export function Navigation() {

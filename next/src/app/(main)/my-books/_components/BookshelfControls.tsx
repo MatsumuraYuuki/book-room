@@ -3,7 +3,6 @@ interface BookshelfFilterProps {
   selectedSort: 'newest' | 'oldest';
   onStatusChange: (status: 'all' | 'unread' | 'reading' | 'completed') => void;
   onSortChange: (sort: 'newest' | 'oldest') => void;
-
 }
 
 export default function BookshelfControls({
@@ -13,11 +12,11 @@ export default function BookshelfControls({
   onSortChange
 }: BookshelfFilterProps) {
   return (
-    <div className='mb-4 flex gap-4 justify-between'>
-      <div className=" flex gap-4 ">
+    <div className='mb-4 flex gap-3 sm:gap-4 justify-between items-center'>
+      <div className="flex gap-2 sm:gap-4 overflow-x-auto">
         <button
           onClick={() => onStatusChange('all')}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap
             ${selectedStatus === 'all'
               ? 'bg-gray-900 text-white'
               : 'bg-gray-200 text-gray-700'
@@ -28,7 +27,7 @@ export default function BookshelfControls({
 
         <button
           onClick={() => onStatusChange('unread')}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap
             ${selectedStatus === 'unread'
               ? 'bg-gray-900 text-white'
               : 'bg-gray-200 text-gray-700'
@@ -39,7 +38,7 @@ export default function BookshelfControls({
 
         <button
           onClick={() => onStatusChange('reading')}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap
             ${selectedStatus === 'reading'
               ? 'bg-gray-900 text-white'
               : 'bg-gray-200 text-gray-700'
@@ -50,7 +49,7 @@ export default function BookshelfControls({
 
         <button
           onClick={() => onStatusChange('completed')}
-          className={`px-3 py-2 rounded-lg text-sm font-medium transition
+          className={`px-3 py-2 rounded-lg text-sm font-medium transition whitespace-nowrap
             ${selectedStatus === 'completed'
               ? 'bg-gray-900 text-white'
               : 'bg-gray-200 text-gray-700'
@@ -61,13 +60,10 @@ export default function BookshelfControls({
       </div>
       <button
         onClick={() => onSortChange(selectedSort === "newest" ? "oldest" : "newest")}
-        className='w-32 px-3 py-2 rounded-lg text-sm font-medium transition bg-gray-200 text-gray-700'
+        className='w-24 sm:w-28 px-3 py-2 rounded-lg text-xs sm:text-sm font-medium transition bg-gray-200 text-gray-700'
       >
         {selectedSort === "newest" ? "新しい順 ▼" : "古い順 ▲"}
       </button>
     </div>
   )
 }
-
-
-

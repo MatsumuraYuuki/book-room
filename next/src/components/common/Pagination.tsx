@@ -33,8 +33,8 @@ export default function Pagination({ meta, onPageChange }: PaginationProps) {
         pageLinkClassName={paginationStyles.pageLink}
         activeClassName={paginationStyles.active}
         activeLinkClassName={paginationStyles.activeLink}
-        previousLabel="前へ"
-        nextLabel="次へ"
+        previousLabel={<span className="whitespace-nowrap">前へ</span>}
+        nextLabel={<span className="whitespace-nowrap">次へ</span>}
         previousClassName={paginationStyles.navigation}
         nextClassName={paginationStyles.navigation}
         previousLinkClassName={paginationStyles.navigationLink}

@@ -40,6 +40,7 @@ export default function ProfilePage() {
             alt={user.name || "ユーザー"}
             width={96}
             height={96}
+            priority
           />
           <div className="flex-1">
             <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>

@@ -7,6 +7,12 @@ interface PaginationProps {
 };
 
 export default function Pagination({ meta, onPageChange }: PaginationProps) {
+
+  // データが空の場合はページネーションを表示しない
+  if (meta.totalPages === 0) {
+    return null;
+  }
+  
   const paginationStyles = {
     container: "flex items-center space-x-2",
     page: "inline-block",

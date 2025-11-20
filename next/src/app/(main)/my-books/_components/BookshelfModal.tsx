@@ -92,7 +92,7 @@ export default function BookshelfModal({
 
           {/* 読む・削除 エリア */}
           <div className="flex gap-2 sm:gap-3">
-            <button className="flex-1 py-2 px-4 text-sm sm:text-base border-2 border-gray-500 text-black　hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+            <button className="flex-1 py-2 px-4 text-sm sm:text-base border-2 rounded-md border-gray-500 text-black hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
               <BookOpenIcon className="w-5 h-5" />
               読む
             </button>

@@ -19,6 +19,7 @@ RSpec.describe "Api::V1::Bookshelves", type: :request do
 
   describe "POST /api/v1/bookshelves" do
     subject { post(api_v1_bookshelves_path, params:, headers:) }
+
     let(:params) { { bookshelf: { aozora_book_id: aozora_book.id, status: :unread } } }
 
     it "正常に本が追加される" do
@@ -63,9 +64,10 @@ RSpec.describe "Api::V1::Bookshelves", type: :request do
 
   describe "PATCH /api/v1/bookshelves" do
     subject { patch(api_v1_bookshelf_path(bookshelf.id), params:, headers:) }
-    let(:params) { { bookshelf: {  status: :completed } } }
+
+    let(:params) { { bookshelf: { status: :completed } } }
     let!(:bookshelf) { create(:bookshelf, user: current_user, aozora_book: aozora_book, status: :reading) }
-    
+
     it "正常にstatusが変更される" do
       subject
 
@@ -73,6 +75,5 @@ RSpec.describe "Api::V1::Bookshelves", type: :request do
       res = response.parsed_body
       expect(res["status"]).to eq("completed")
     end
-
-  end  
+  end
 end

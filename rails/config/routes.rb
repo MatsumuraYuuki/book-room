@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :users, only: [:show]
       resources :aozora_books, only: [:index]
-      resources :bookshelves, only: [:index, :create]
+      resources :bookshelves, only: [:index, :create, :update]
 
       namespace :current do
         resource :user, only: [:show, :update], controller: "user"

@@ -60,4 +60,19 @@ RSpec.describe "Api::V1::Bookshelves", type: :request do
       end
     end
   end
+
+  describe "PATCH /api/v1/bookshelves" do
+    subject { patch(api_v1_bookshelf_path(bookshelf.id), params:, headers:) }
+    let(:params) { { bookshelf: {  status: :completed } } }
+    let!(:bookshelf) { create(:bookshelf, user: current_user, aozora_book: aozora_book, status: :reading) }
+    
+    it "正常にstatusが変更される" do
+      subject
+
+      expect(response).to have_http_status(:ok)
+      res = response.parsed_body
+      expect(res["status"]).to eq("completed")
+    end
+
+  end  
 end

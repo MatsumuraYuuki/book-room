@@ -76,4 +76,15 @@ RSpec.describe "Api::V1::Bookshelves", type: :request do
       expect(res["status"]).to eq("completed")
     end
   end
+
+  describe "DELETE /api/v1/bookshelves/:id" do
+    let!(:bookshelf) { create(:bookshelf, user: current_user) }
+
+    subject { delete(api_v1_bookshelf_path(bookshelf.id), headers:) }
+
+    it "正常に削除される" do
+      subject
+      expect(response).to have_http_status(:no_content)
+    end
+  end  
 end

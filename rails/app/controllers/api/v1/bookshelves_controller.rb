@@ -27,6 +27,12 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
     end
   end
   
+  def destroy
+    bookshelf = current_user.bookshelves.find(params[:id])
+    bookshelf.destroy
+    head :no_content
+  end
+
   private
     def bookshelf_params
       params.require(:bookshelf).permit(:aozora_book_id, :status)

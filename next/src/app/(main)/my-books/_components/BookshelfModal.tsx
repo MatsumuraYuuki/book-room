@@ -35,6 +35,7 @@ export default function BookshelfModal({
     { status: "completed", label: "読了"}
   ]
 
+  // ステータス変更
   const mutation = useMutation<Bookshelf, Error, string>({
     mutationFn: async (status: string) => {
       const response = await api.patch(`/bookshelves/${bookshelf?.id}`, {
@@ -60,6 +61,28 @@ export default function BookshelfModal({
       }
     }
   })
+
+  // 本棚から削除
+  const deleteMutation = useMutation({
+    mutationFn: async () => {
+      await api.delete(`/bookshelves/${bookshelf?.id}`)
+    },
+    onSuccess: () => {
+      toast.success('本棚から削除しました')
+      queryClient.invalidateQueries({ queryKey: ['bookshelves'] })
+      onClose()
+    },
+    onError: (error) => {
+      if (axios.isAxiosError(error) && error.response) {
+        // サーバーからレスポンスがある場合 / AxiosErrorオブジェクト構造からエラー取り出す
+        const errorMessage = error.response.data.errors?.[0] || "削除に失敗しました";
+        toast.error(errorMessage)
+      } else {
+        // ネットワークエラーなど
+        toast.error('ネットワークエラーが発生しました');
+      }
+    }
+  })  
 
   if (!isOpen) return null;
 
@@ -123,7 +146,6 @@ export default function BookshelfModal({
                   {option.label}
                 </button>
               ))}
-
             </div>
           </div>
 
@@ -136,7 +158,14 @@ export default function BookshelfModal({
               <BookOpenIcon className="w-5 h-5" />
               読む
             </button>
-            <button className="py-2 px-4 text-sm sm:text-base text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors">
+            <button
+              className="py-2 px-4 text-sm sm:text-base text-red-600 border border-red-600 rounded hover:bg-red-50 transition-colors"
+              onClick={() => {
+                if (window.confirm('本当にこの本を削除しますか？')) {
+                  deleteMutation.mutate()
+                }
+              }}
+              >
               削除
             </button>
           </div>

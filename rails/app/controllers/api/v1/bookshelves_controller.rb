@@ -13,7 +13,7 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
     if bookshelf.save
       render json: bookshelf, status: :created
     else
-      render json: { errors: bookshelf.errors.full_messages }, status: 
+      render json: { errors: bookshelf.errors.full_messages }, status:
       :unprocessable_entity
     end
   end
@@ -26,14 +26,15 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
       render json: { errors: bookshelf.errors.full_messages }, status: :unprocessable_entity
     end
   end
-  
+
   def destroy
     bookshelf = current_user.bookshelves.find(params[:id])
-    bookshelf.destroy
+    bookshelf.destroy!
     head :no_content
   end
 
   private
+
     def bookshelf_params
       params.require(:bookshelf).permit(:aozora_book_id, :status)
     end

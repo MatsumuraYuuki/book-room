@@ -94,7 +94,7 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
       <button
         type="button"
         onClick={clickHandler}
-        className='flex items-center gap-1 px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors'
+        className='flex items-center gap-1 px-2 md:px-4 py-2 border border-blue-600 rounded-md hover:bg-blue-50 transition-colors'
       >
         <BookmarkIcon className="h-6 w-6" />
         本棚に登録

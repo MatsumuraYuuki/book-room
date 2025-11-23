@@ -17,6 +17,16 @@ export interface AozoraBook {
   aozoraCardUrl: string;
 }
 
+export interface Bookshelf {
+  id: number;
+  userId: number;
+  aozoraBookId: number;
+  status: "unread" | "reading" | "completed"
+  completedAt: string | null;
+  aozoraBook: AozoraBook;
+  createdAt: string;
+}
+
 // ページネーションで使用
 export interface MetaProps {
   currentPage: number;

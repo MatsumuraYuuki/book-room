@@ -1,9 +1,10 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast'
 import Image from 'next/image';
 import { api } from '@/lib/api';
 import { User } from '@/types/common';
@@ -22,7 +23,7 @@ export default function ProfileEditPage() {
 
   const router = useRouter();
   const { register, handleSubmit, setValue, formState: { errors } } = useForm<FormData>();
-
+  const queryClient = useQueryClient();
 
   const { data: user = null, isLoading: loading, error } = useQuery<User>({
     queryKey: ['user'],
@@ -50,8 +51,8 @@ export default function ProfileEditPage() {
       setPreviewUrl(url);
     }
   };
-  // TODO: フォーム送信処理
 
+  // TODO: フォーム送信処理
   const onSubmit = async (data: FormData) => {
     try {
       // 1. FormDataオブジェクトを作成
@@ -65,14 +66,16 @@ export default function ProfileEditPage() {
       // 4. APIにPATCHリクエストを送信
       await api.patch("current/user", formData, {
         headers: {
-          "Content-Type": 'multipart/form-data',  //画像ファイル用の形式
+          "Content-Type": 'multipart/form-data',  //画像ファイル用の形式を指定
         }
       });
-      // 5. 成功したら /profileにリダイレクト
+      // 5 queryKeyに関連するすべてのキャッシュデータを再取得する +  成功したら(/profile)にリダイレクト
+      queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push("/profile");
-
+      toast.success('ユーザー情報を変更しました')
     } catch (error) {
       console.error('更新失敗:', error);
+      toast.error('更新に失敗しました')
     }
   };
 

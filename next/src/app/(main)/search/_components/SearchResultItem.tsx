@@ -12,7 +12,7 @@ export default function SearchResultItem({ aozoraBook, isLast }: SearchResultIte
       className={`flex justify-between py-4 space-y-2 ${!isLast ? 'border-b border-gray-300' : ''}`}
     >
       <div>
-        <p className="text-xl font-bold text-gray-900">{aozoraBook.title}</p>
+        <p className="text-lg md:text-xl font-bold text-gray-900">{aozoraBook.title}</p>
         <p className="text-gray-600">{aozoraBook.author}</p>
         <a
           href={aozoraBook.aozoraCardUrl}

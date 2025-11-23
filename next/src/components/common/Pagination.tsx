@@ -7,6 +7,12 @@ interface PaginationProps {
 };
 
 export default function Pagination({ meta, onPageChange }: PaginationProps) {
+
+  // データが空の場合はページネーションを表示しない
+  if (meta.totalPages === 0) {
+    return null;
+  }
+  
   const paginationStyles = {
     container: "flex items-center space-x-2",
     page: "inline-block",
@@ -33,8 +39,8 @@ export default function Pagination({ meta, onPageChange }: PaginationProps) {
         pageLinkClassName={paginationStyles.pageLink}
         activeClassName={paginationStyles.active}
         activeLinkClassName={paginationStyles.activeLink}
-        previousLabel="前へ"
-        nextLabel="次へ"
+        previousLabel={<span className="whitespace-nowrap">前へ</span>}
+        nextLabel={<span className="whitespace-nowrap">次へ</span>}
         previousClassName={paginationStyles.navigation}
         nextClassName={paginationStyles.navigation}
         previousLinkClassName={paginationStyles.navigationLink}

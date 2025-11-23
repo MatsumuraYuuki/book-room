@@ -25,7 +25,7 @@ export default function SearchPage() {
   const searchParams = useSearchParams()
   const router = useRouter()
 
-  // 型をジェネリクスで指定
+  // useMutation関数の【呼び出し】＋ 型をジェネリクスで指定　
   const mutation = useMutation<SearchResponse, Error, { keyword: string, page: number }>({
     mutationFn: async ({ keyword, page }) => {
       const response = await api.get(`aozora_books?keyword=${keyword}&page=${page}`)
@@ -63,7 +63,7 @@ export default function SearchPage() {
   }, [mutation.isPending])
 
   return (
-    <div className="max-w-2xl mx-auto">
+    <div className="max-w-2xl mx-auto px-8">
       <h1 className="text-3xl font-bold mb-6">作品を検索</h1>
       <p className="text-sm text-gray-600 mb-2">
         作品名、著者名を入力して検索してください。<br />

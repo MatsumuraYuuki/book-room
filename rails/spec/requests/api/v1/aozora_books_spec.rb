@@ -57,4 +57,21 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
       end
     end
   end
+
+  describe "GET /content" do
+    let(:aozora_book) { create(:aozora_book)}
+
+    let(:mock_html) do
+      '<div class="main_text">テスト用の本文です。</div>'
+    end   
+
+    it "本文が取得できる" do
+      allow(Net::HTTP).to receive(:get).and_return(mock_html)
+      get(content_api_v1_aozora_book_path(aozora_book.id))
+
+      res = response.parsed_body
+      expect(response).to have_http_status(:ok)
+      expect(res["content"]).to include("テスト用の本文です。")      
+    end
+  end  
 end

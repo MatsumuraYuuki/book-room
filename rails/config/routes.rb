@@ -7,7 +7,7 @@ Rails.application.routes.draw do
       resources :users, only: [:show]
       resources :aozora_books, only: [:index] do
         member do
-          get :content  # GET /api/v1/aozora_books/:id/content
+          get :content # GET /api/v1/aozora_books/:id/content
         end
       end
       resources :bookshelves, only: [:index, :create, :update, :destroy]

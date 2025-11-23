@@ -59,11 +59,11 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
   end
 
   describe "GET /content" do
-    let(:aozora_book) { create(:aozora_book)}
+    let(:aozora_book) { create(:aozora_book) }
 
     let(:mock_html) do
       '<div class="main_text">テスト用の本文です。</div>'
-    end   
+    end
 
     it "本文が取得できる" do
       allow(Net::HTTP).to receive(:get).and_return(mock_html)
@@ -71,7 +71,7 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
 
       res = response.parsed_body
       expect(response).to have_http_status(:ok)
-      expect(res["content"]).to include("テスト用の本文です。")      
+      expect(res["content"]).to include("テスト用の本文です。")
     end
-  end  
+  end
 end

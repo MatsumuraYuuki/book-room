@@ -71,6 +71,8 @@ RSpec.describe "Api::V1::AozoraBooks", type: :request do
 
       res = response.parsed_body
       expect(response).to have_http_status(:ok)
+      expect(res["title"]).to eq(aozora_book.title)
+      expect(res["author"]).to eq(aozora_book.author)      
       expect(res["content"]).to include("テスト用の本文です。")
     end
   end

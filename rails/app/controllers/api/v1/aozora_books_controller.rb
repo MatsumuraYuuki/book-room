@@ -35,6 +35,10 @@ class Api::V1::AozoraBooksController < ApplicationController
     end
     content = main_text.inner_html # Nokogiriのオブジェクトから文字列に変換
     # 4. JSONで返す
-    render json: { content: content }
+    render json: {
+      title: aozora_book.title,
+      author: aozora_book.author,
+      content: content
+    }
   end
 end

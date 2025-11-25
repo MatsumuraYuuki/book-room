@@ -3,9 +3,18 @@
 
 import Link from 'next/link';
 import { useAuthStore } from '@/stores/authStore'
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 
 export const Header = () => {
+  // readerページの判定
+  const pathname = usePathname();
+  const isReaderPage = pathname?.startsWith('/reader');
+
+  // readerページでは何も表示しない
+  if (isReaderPage) {
+    return null;
+  }
+
   // 認証情報を取得
   const { user, isLoggedIn, signOut } = useAuthStore();
   const router = useRouter();

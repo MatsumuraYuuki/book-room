@@ -10,11 +10,6 @@ export const Header = () => {
   const pathname = usePathname();
   const isReaderPage = pathname?.startsWith('/reader');
 
-  // readerページでは何も表示しない
-  if (isReaderPage) {
-    return null;
-  }
-
   // 認証情報を取得
   const { user, isLoggedIn, signOut } = useAuthStore();
   const router = useRouter();
@@ -24,6 +19,11 @@ export const Header = () => {
     signOut();           // サインアウト実行
     router.push('/');    // ホームページに移動
   };
+
+  // readerページではheaderを表示しない
+  if (isReaderPage) {
+    return null;
+  }
 
   return (
     <>

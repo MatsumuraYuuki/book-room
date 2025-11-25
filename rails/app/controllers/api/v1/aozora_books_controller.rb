@@ -27,6 +27,12 @@ class Api::V1::AozoraBooksController < ApplicationController
     # 3. Nokogiriで本文を抽出
     doc = Nokogiri::HTML(html)
     main_text = doc.at_css(".main_text")
+    # 外字画像を代替テキストに置き換え
+    main_text.css('img.gaiji').each do |img|
+      alt_text = img['alt']
+      # 画像を [※外字] のような形式に置き換え
+      img.replace("<span class='gaiji-alt'>[#{alt_text}]</span>")
+    end
     content = main_text.inner_html # Nokogiriのオブジェクトから文字列に変換
     # 4. JSONで返す
     render json: { content: content }

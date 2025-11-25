@@ -1,3 +1,4 @@
+import { useRouter } from "next/navigation";
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from "react-hot-toast";
@@ -20,6 +21,7 @@ export default function BookshelfModal({
 
   // onSuccessで queryClient.invalidateQueries を呼ぶ
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const formattedDate = bookshelf?.createdAt
     ? new Date(bookshelf.createdAt).toLocaleDateString('ja-JP', {
@@ -30,9 +32,9 @@ export default function BookshelfModal({
     : '';
 
   const statusOptions = [
-    { status: "unread", label: "未読"},
-    { status: "reading", label: "読書中"},
-    { status: "completed", label: "読了"}
+    { status: "unread", label: "未読" },
+    { status: "reading", label: "読書中" },
+    { status: "completed", label: "読了" }
   ]
 
   // ステータス変更
@@ -82,7 +84,7 @@ export default function BookshelfModal({
         toast.error('ネットワークエラーが発生しました');
       }
     }
-  })  
+  })
 
   if (!isOpen) return null;
 
@@ -154,7 +156,10 @@ export default function BookshelfModal({
 
           {/* 読む & 削除 エリア */}
           <div className="flex gap-2 sm:gap-3">
-            <button className="flex-1 py-2 px-4 text-sm sm:text-base border-2 rounded-md border-gray-500 text-black hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+            <button
+              className="flex-1 py-2 px-4 text-sm sm:text-base border-2 rounded-md border-gray-500 text-black hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+              onClick={() => router.push(`reader/${bookshelf?.aozoraBook.id}`)}
+            >
               <BookOpenIcon className="w-5 h-5" />
               読む
             </button>
@@ -165,7 +170,7 @@ export default function BookshelfModal({
                   deleteMutation.mutate()
                 }
               }}
-              >
+            >
               削除
             </button>
           </div>

@@ -60,26 +60,27 @@ export default function ProfilePage() {
   return (
     <div className="max-w-4xl mx-auto px-4 py-6">
       {/* ヘッダー部分 */}
-      <div className="bg-white shadow rounded-lg p-6 mb-6">
-        <div className="flex items-center space-x-6">
-          <Image
-            className="w-24 h-24 object-cover rounded-full"
-            src={user.imageUrl || "/default-avatar.png"}
-            alt={user.name || "ユーザー"}
-            width={96}
-            height={96}
-            priority
-          />
-          <div className="flex-1">
-            <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
-            <p className="text-gray-600">{user.email}</p>
-            <Link
-              href="/profile/edit"
-              className="mt-3 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-            >
-              プロフィール編集
-            </Link>
+      <div className="mb-6">
+        <div className="flex items-start justify-between">
+          <div className="flex items-center gap-6">
+            <Image
+              className="w-24 h-24 object-cover rounded-full"
+              src={user.imageUrl || "/default-avatar.png"}
+              alt={user.name || "ユーザー"}
+              width={96}
+              height={96}
+              priority
+            />
+            <div>
+              <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
+            </div>
           </div>
+          <Link
+            href="/profile/edit"
+            className="px-4 py-2 rounded-md text-gray-600 font-bold hover:bg-gray-100 transition"
+          >
+            プロフィール編集
+          </Link>
         </div>
       </div>
 

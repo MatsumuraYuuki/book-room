@@ -11,7 +11,7 @@ class Api::V1::Current::UserController < Api::V1::BaseController
     result = if password_change?
                current_user.update_with_password(user_params_with_password)
              else
-               current_user.update!(user_params)
+               current_user.update(user_params)
              end
 
     if result

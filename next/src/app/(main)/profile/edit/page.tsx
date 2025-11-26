@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 import toast from 'react-hot-toast'
 import Image from 'next/image';
 import { api } from '@/lib/api';
@@ -100,11 +101,18 @@ export default function ProfileEditPage() {
       queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push("/profile");
       toast.success('ユーザー情報を変更しました')
-    } catch (error: any) {
-      if (error.response?.data?.errors) {
-        error.response.data.errors.forEach((message: string) => {
-          toast.error(message);
-        });
+    } catch (error) {
+      console.error('更新失敗:', error);
+
+      // AxiosErrorの場合、バックエンドのエラーメッセージを表示
+      if (error instanceof AxiosError && error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        // 配列の場合は最初のエラーを表示、文字列の場合はそのまま表示
+        if (Array.isArray(errors)) {
+          errors.forEach((message: string) => toast.error(message));
+        } else {
+          toast.error(errors);
+        }
       } else {
         toast.error('更新に失敗しました');
       }
@@ -185,6 +193,8 @@ export default function ProfileEditPage() {
             </label>
             <input
               type="text"
+              id="name"
+              autoComplete="name"
               {...register('name', { required: 'ユーザー名を入力してください' })}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
@@ -200,6 +210,8 @@ export default function ProfileEditPage() {
             </label>
             <input
               type="email"
+              id="email"
+              autoComplete="email"
               {...register('email', {
                 required: 'メールアドレスを入力してください',
                 pattern: {
@@ -227,6 +239,8 @@ export default function ProfileEditPage() {
             </label>
             <input
               type="password"
+              id="currentPassword"
+              autoComplete="current-password"
               {...register('currentPassword')}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />
@@ -239,6 +253,8 @@ export default function ProfileEditPage() {
             </label>
             <input
               type="password"
+              id="newPassword"
+              autoComplete="new-password"
               {...register('newPassword', {
                 minLength: {
                   value: 6,
@@ -259,6 +275,8 @@ export default function ProfileEditPage() {
             </label>
             <input
               type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
               {...register('confirmPassword')}
               className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
             />

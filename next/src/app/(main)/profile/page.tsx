@@ -63,14 +63,14 @@ export default function ProfilePage() {
       <div className="mb-6">
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-6">
-            <Image
-              className="w-24 h-24 object-cover rounded-full"
-              src={user.imageUrl || "/default-avatar.png"}
-              alt={user.name || "ユーザー"}
-              width={96}
-              height={96}
-              priority
-            />
+              <Image
+                className="w-24 h-24 object-cover rounded-full"
+                src={user?.imageUrl || "/default-avatar.png"}
+                alt={user.name || "ユーザー"}
+                width={96}
+                height={96}
+                priority
+              />            
             <div>
               <h1 className="text-2xl font-bold text-gray-900">{user.name}</h1>
             </div>

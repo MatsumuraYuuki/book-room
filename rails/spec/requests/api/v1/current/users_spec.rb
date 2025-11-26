@@ -59,7 +59,9 @@ RSpec.describe "Api::V1::Current::Users", type: :request do
         subject
 
         res = response.parsed_body
-        expect(res["error"]).to eq "User not updated"
+
+        expect(res["errors"]).to be_present
+        expect(res["errors"]).to be_an(Array)
         expect(response).to have_http_status(:unprocessable_entity)
       end
     end

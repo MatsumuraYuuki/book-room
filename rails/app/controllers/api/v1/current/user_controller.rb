@@ -9,10 +9,10 @@ class Api::V1::Current::UserController < Api::V1::BaseController
   def update
     # パスワード変更がある場合は update_with_password を使用
     result = if password_change?
-      current_user.update_with_password(user_params_with_password)
-    else
-      current_user.update(user_params)
-    end
+               current_user.update_with_password(user_params_with_password)
+             else
+               current_user.update!(user_params)
+             end
 
     if result
       render json: current_user, serializer: CurrentUserSerializer

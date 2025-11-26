@@ -28,8 +28,8 @@ class Api::V1::AozoraBooksController < ApplicationController
     doc = Nokogiri::HTML(html)
     main_text = doc.at_css(".main_text")
     # 外字画像を代替テキストに置き換え
-    main_text.css('img.gaiji').each do |img|
-      alt_text = img['alt']
+    main_text.css("img.gaiji").each do |img|
+      alt_text = img["alt"]
       # 画像を [※外字] のような形式に置き換え
       img.replace("<span class='gaiji-alt'>[#{alt_text}]</span>")
     end
@@ -38,7 +38,7 @@ class Api::V1::AozoraBooksController < ApplicationController
     render json: {
       title: aozora_book.title,
       author: aozora_book.author,
-      content: content
+      content: content,
     }
   end
 end

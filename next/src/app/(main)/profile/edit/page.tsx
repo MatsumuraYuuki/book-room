@@ -146,6 +146,7 @@ export default function ProfileEditPage() {
                 alt="現在のプロフィール画像"
                 width={96}
                 height={96}
+                priority
               />
             </div>
 
@@ -165,10 +166,13 @@ export default function ProfileEditPage() {
 
           {/* 画像アップロード */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label
+              htmlFor="profile-image"
+              className="block text-sm font-medium text-gray-700 mb-2">
               画像を選択
             </label>
             <input
+              id="profile-image"
               type="file"
               accept="image/*"
               onChange={handleImageChange}

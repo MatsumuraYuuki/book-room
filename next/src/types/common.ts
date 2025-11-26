@@ -25,6 +25,7 @@ export interface Bookshelf {
   completedAt: string | null;
   aozoraBook: AozoraBook;
   createdAt: string;
+  updatedAt: string;
 }
 
 // ページネーションで使用

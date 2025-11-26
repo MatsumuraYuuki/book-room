@@ -40,8 +40,22 @@ api.interceptors.request.use(
 );
 
 // レスポンス(=受け取ったときの処理)インターセプターを追加します
+// ステータスコードが 2xx の範囲にある場合、この関数が起動します
 api.interceptors.response.use(function onFulfilled(response) {
-    // ステータスコードが 2xx の範囲にある場合、この関数が起動します
+
+    // DeviseTokenAuthから新しいトークンが返された場合、更新する（メール更新時使用）
+    const newAccessToken = response.headers['access-token'];
+    const newClient = response.headers['client'];
+    const newUid = response.headers['uid'];
+
+    if (newAccessToken && newClient && newUid) {
+      useAuthStore.getState().setAuthTokens({
+        accessToken: newAccessToken,
+        client: newClient,
+        uid: newUid
+      });
+    }
+
     // レスポンス データの処理
     response.data = camelcaseKeys(response.data, { deep: true })
     return response;

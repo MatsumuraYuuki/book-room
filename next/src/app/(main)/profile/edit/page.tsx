@@ -60,6 +60,12 @@ export default function ProfileEditPage() {
   // フォーム送信処理
   const onSubmit = async (data: FormData) => {
     try {
+      // 新しいパスワードが入力されているのに、現在のパスワードが空の場合
+      if ((data.newPassword || data.confirmPassword) && !data.currentPassword) {
+        toast.error('現在のパスワードを入力してください');
+        return;
+      }
+
       // パスワード確認チェック
       if (data.newPassword && data.newPassword !== data.confirmPassword) {
         toast.error('新しいパスワードと確認用パスワードが一致しません');
@@ -94,9 +100,14 @@ export default function ProfileEditPage() {
       queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push("/profile");
       toast.success('ユーザー情報を変更しました')
-    } catch (error) {
-      console.error('更新失敗:', error);
-      toast.error('更新に失敗しました')
+    } catch (error: any) {
+      if (error.response?.data?.errors) {
+        error.response.data.errors.forEach((message: string) => {
+          toast.error(message);
+        });
+      } else {
+        toast.error('更新に失敗しました');
+      }
     }
   };
 

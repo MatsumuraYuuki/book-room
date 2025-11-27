@@ -57,10 +57,12 @@ export default function SignInPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* メールアドレス入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='email' className="block text-sm font-medium mb-1">
             メールアドレス
           </label>
           <input
+            id='email'
+            autoComplete='email'
             {...register('email', {
               required: 'メールアドレスを入力してください',
               pattern: {
@@ -79,10 +81,12 @@ export default function SignInPage() {
 
         {/* パスワード入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='password' className="block text-sm font-medium mb-1">
             パスワード
           </label>
           <input
+          id='password'
+          autoComplete='current-password'
             {...register('password', {
               required: 'パスワードを入力してください',
               minLength: {

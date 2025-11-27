@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 import toast from 'react-hot-toast'
 import Image from 'next/image';
 import { api } from '@/lib/api';
@@ -12,6 +13,10 @@ import { User } from '@/types/common';
 // フォームのデータ型
 interface FormData {
   name: string;
+  email: string;
+  currentPassword?: string;
+  newPassword?: string;
+  confirmPassword?: string;
   // imageはファイルなので、ここには含めない
 }
 
@@ -36,6 +41,7 @@ export default function ProfileEditPage() {
   useEffect(() => {
     if (user) {
       setValue('name', user.name);
+      setValue('email', user.email);
     }
   }, [user, setValue]);
 
@@ -52,30 +58,69 @@ export default function ProfileEditPage() {
     }
   };
 
-  // TODO: フォーム送信処理
+  // フォーム送信処理
   const onSubmit = async (data: FormData) => {
     try {
-      // 1. FormDataオブジェクトを作成
+      // 新しいパスワードが入力されているのに、現在のパスワードが空の場合
+      if ((data.newPassword || data.confirmPassword) && !data.currentPassword) {
+        toast.error('現在のパスワードを入力してください');
+        return;
+      }
+      // 現在のパスワードが入力されているのに、新しいパスワードが空の場合
+      if (data.currentPassword && !data.newPassword) {
+        toast.error('新しいパスワードを入力してください');
+        return;
+      }
+
+      // パスワード確認チェック
+      if (data.newPassword && data.newPassword !== data.confirmPassword) {
+        toast.error('新しいパスワードと確認用パスワードが一致しません');
+        return;
+      }
+
+      // FormDataオブジェクトを作成
       const formData = new FormData();
-      // 2. ユーザー名を追加
       formData.append('user[name]', data.name);
-      // 3. 画像が選択されていれば追加
+      formData.append('user[email]', data.email);
+
+      // 画像が選択されていれば追加
       if (selectedImage) {
         formData.append('user[image]', selectedImage);
       }
-      // 4. APIにPATCHリクエストを送信
+
+      // パスワード変更が入力されている場合のみ追加
+      if (data.currentPassword && data.newPassword) {
+        formData.append('user[current_password]', data.currentPassword);
+        formData.append('user[password]', data.newPassword);
+        formData.append('user[password_confirmation]', data.confirmPassword || '');
+      }
+
+      // APIにPATCHリクエストを送信
       await api.patch("current/user", formData, {
         headers: {
-          "Content-Type": 'multipart/form-data',  //画像ファイル用の形式を指定
+          "Content-Type": 'multipart/form-data',
         }
       });
-      // 5 queryKeyに関連するすべてのキャッシュデータを再取得する +  成功したら(/profile)にリダイレクト
+
+      // キャッシュを再取得してプロフィールページにリダイレクト
       queryClient.invalidateQueries({ queryKey: ["user"] })
       router.push("/profile");
       toast.success('ユーザー情報を変更しました')
     } catch (error) {
       console.error('更新失敗:', error);
-      toast.error('更新に失敗しました')
+
+      // AxiosErrorの場合、バックエンドのエラーメッセージを表示
+      if (error instanceof AxiosError && error.response?.data?.errors) {
+        const errors = error.response.data.errors;
+        // 配列の場合は最初のエラーを表示、文字列の場合はそのまま表示
+        if (Array.isArray(errors)) {
+          errors.forEach((message: string) => toast.error(message));
+        } else {
+          toast.error(errors);
+        }
+      } else {
+        toast.error('更新に失敗しました');
+      }
     }
   };
 
@@ -89,62 +134,180 @@ export default function ProfileEditPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto">
-      <h1 className="text-2xl font-bold mb-6">プロフィール編集</h1>
-      {/* TODO: フォームを作る */}
+    <div className="max-w-2xl mx-auto px-4 py-6">
+
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* 画像プレビュー */}
-        <div className="flex gap-8">
-          {/* 左側: 現在の画像 */}
-          <div>
-            <p>現在の画像</p>
-            <Image
-              className="w-24 h-24 object-cover rounded-full"
-              src={user?.imageUrl || "/default-avatar.png"}
-              alt="現在のプロフィール画像"
-              width={96}
-              height={96}
-            />
-          </div>
-          {/* 右側: プレビュー画像（選択された場合のみ表示） */}
-          {previewUrl && (
-            <div>
-              <p>更新後の画像</p>
+        {/* プロフィール画像セクション */}
+        <div className="bg-white shadow rounded-lg p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">プロフィール画像</h2>
+
+          {/* 画像プレビュー */}
+          <div className="flex gap-8 mb-4">
+            <div className="text-center">
+              <p className="text-sm text-gray-600 mb-2">現在の画像</p>
               <Image
                 className="w-24 h-24 object-cover rounded-full"
-                src={previewUrl || "/default-avatar.png"}
-                alt="更新後のプロフィール画像"
+                src={user?.imageUrl || "/default-avatar.png"}
+                alt="現在のプロフィール画像"
                 width={96}
                 height={96}
+                priority
               />
             </div>
-          )}
+
+            {previewUrl && (
+              <div className="text-center">
+                <p className="text-sm text-gray-600 mb-2">更新後の画像</p>
+                <Image
+                  className="w-24 h-24 object-cover rounded-full"
+                  src={previewUrl}
+                  alt="更新後のプロフィール画像"
+                  width={96}
+                  height={96}
+                />
+              </div>
+            )}
+          </div>
+
+          {/* 画像アップロード */}
+          <div>
+            <label
+              htmlFor="profile-image"
+              className="block text-sm font-medium text-gray-700 mb-2">
+              画像を選択
+            </label>
+            <input
+              id="profile-image"
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-md file:border-0
+                file:text-sm file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100"
+            />
+          </div>
         </div>
 
-        {/* 画像アップロード */}
-        <div>
-          <label>プロフィール画像</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-          />
+        {/* 基本情報セクション */}
+        <div className="bg-white shadow rounded-lg p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">基本情報</h2>
+
+          {/* ユーザー名 */}
+          <div>
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
+              ユーザー名 <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              autoComplete="name"
+              {...register('name', { required: 'ユーザー名を入力してください' })}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+            {errors.name && (
+              <p className="mt-1 text-sm text-red-500">{errors.name.message}</p>
+            )}
+          </div>
+
+          {/* メールアドレス */}
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+              メールアドレス <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="email"
+              id="email"
+              autoComplete="email"
+              {...register('email', {
+                required: 'メールアドレスを入力してください',
+                pattern: {
+                  value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                  message: '有効なメールアドレスを入力してください'
+                }
+              })}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+            {errors.email && (
+              <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
+            )}
+          </div>
         </div>
 
-        {/* ユーザー名入力 */}
-        <div>
-          {/* TODO: ユーザー名の入力フィールド */}
-          <label htmlFor="name">ユーザー名</label>
-          <input type="text"
-            {...register('name', { required: 'ユーザー名を入力してください' })}
-            className="border border-gray-300 rounded px-3 py-2 w-full"
-          />
-          {/* エラーメッセージ表示 */}
-          {errors.name && <p className="text-red-500">{errors.name.message}</p>}
+        {/* パスワード変更セクション */}
+        <div className="bg-white shadow rounded-lg p-6 space-y-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">パスワード変更</h2>
+          <p className="text-sm text-gray-600 mb-4">パスワードを変更する場合のみ入力してください</p>
 
+          {/* 現在のパスワード */}
+          <div>
+            <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              現在のパスワード
+            </label>
+            <input
+              type="password"
+              id="currentPassword"
+              autoComplete="current-password"
+              {...register('currentPassword')}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          {/* 新しいパスワード */}
+          <div>
+            <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              新しいパスワード
+            </label>
+            <input
+              type="password"
+              id="newPassword"
+              autoComplete="new-password"
+              {...register('newPassword', {
+                minLength: {
+                  value: 6,
+                  message: 'パスワードは6文字以上で入力してください'
+                }
+              })}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+            {errors.newPassword && (
+              <p className="mt-1 text-sm text-red-500">{errors.newPassword.message}</p>
+            )}
+          </div>
+
+          {/* 新しいパスワード（確認） */}
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
+              新しいパスワード（確認）
+            </label>
+            <input
+              type="password"
+              id="confirmPassword"
+              autoComplete="new-password"
+              {...register('confirmPassword')}
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
         </div>
-        {/* 送信ボタン */}
-        <button type="submit" className="border border-black">更新</button>
+
+        {/* ボタン */}
+        <div className="flex gap-4">
+          <button
+            type="submit"
+            className="flex-1 bg-blue-600 text-white px-6 py-3 rounded-md font-semibold hover:bg-blue-700 transition"
+          >
+            更新する
+          </button>
+          <button
+            type="button"
+            onClick={() => router.push('/profile')}
+            className="px-6 py-3 border border-gray-300 rounded-md font-semibold text-gray-700 hover:bg-gray-50 transition"
+          >
+            キャンセル
+          </button>
+        </div>
       </form>
     </div>
   );

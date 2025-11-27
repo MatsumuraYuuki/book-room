@@ -39,6 +39,9 @@ gem "rails-i18n"
 # ZIPファイルをダウンロードして解凍する
 gem "rubyzip"
 
+# HTMLをパースする
+gem "nokogiri"
+
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
 

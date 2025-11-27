@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAuthStore } from '@/stores/authStore';
 import { api } from '@/lib/api'
 import { Bookshelf } from '@/types/common';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 import BookshelfCard from '@/app/(main)/my-books/_components/BookshelfCard';
 import BookshelfStats from './_components/BookshelfStats';
 import BookshelfControls from './_components/BookshelfControls';
@@ -59,12 +60,7 @@ export default function BookshelfPage() {
 
 
   if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center py-16">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
-        <p className="text-gray-600 text-lg">検索中...</p>
-      </div>
-    )
+    return <LoadingSpinner message="検索中..." />
   }
 
   if (isError) {

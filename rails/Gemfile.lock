@@ -379,6 +379,7 @@ DEPENDENCIES
   kaminari
   letter_opener_web
   mysql2 (~> 0.5)
+  nokogiri
   pry-byebug
   pry-doc
   pry-rails

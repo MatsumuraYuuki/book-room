@@ -39,7 +39,6 @@ export default function SignUpPage() {
     if (success) {
       router.push('/profile'); // サインアップ成功時はプロフィールページに移動
       toast.success('ログインに成功しました')
-      
     }
   };
 
@@ -49,10 +48,12 @@ export default function SignUpPage() {
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         {/* ユーザー名入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='name' className="block text-sm font-medium mb-1">
             ユーザー名
           </label>
           <input
+          id='name'
+          autoComplete='name'
             {...register('name', {
               required: 'ユーザー名を入力してください',
               minLength: {
@@ -71,10 +72,12 @@ export default function SignUpPage() {
 
         {/* メールアドレス入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='email' className="block text-sm font-medium mb-1">
             メールアドレス
           </label>
           <input
+            id='email'
+            autoComplete='email'
             {...register('email', {
               required: 'メールアドレスを入力してください',
               pattern: {
@@ -93,10 +96,12 @@ export default function SignUpPage() {
 
         {/* パスワード入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='new-password' className="block text-sm font-medium mb-1">
             パスワード
           </label>
           <input
+            id='new-password'
+            autoComplete='new-password'
             {...register('password', {
               required: 'パスワードを入力してください',
               minLength: {
@@ -115,10 +120,12 @@ export default function SignUpPage() {
 
         {/* パスワード確認入力 */}
         <div>
-          <label className="block text-sm font-medium mb-1">
+          <label htmlFor='passwordConfirmation' className="block text-sm font-medium mb-1">
             パスワード確認
           </label>
           <input
+            id='passwordConfirmation'
+            autoComplete='new-password'
             {...register('passwordConfirmation', {
               required: 'パスワード確認を入力してください',
               validate: (value) => 

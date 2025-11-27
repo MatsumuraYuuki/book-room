@@ -15,19 +15,21 @@ interface AuthStore {
   // 状態  
   user: User | null;
   isLoggedIn: boolean;
-  loading: boolean;   
+  loading: boolean;
   error: string | null;
   authTokens: AuthTokens | null;
+  hasHydrated: boolean;
 
   // アクション
   setUser: (user: User | null) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setAuthTokens: (authTokens: AuthTokens | null) => void;
+  setHasHydrated: (hasHydrated: boolean) => void
 
-  signUp: (name: string, email: string, password: string) => Promise<boolean> 
-  signIn: (email: string, password: string) => Promise<boolean> 
-  guestSignIn: () => Promise<boolean> 
+  signUp: (name: string, email: string, password: string) => Promise<boolean>
+  signIn: (email: string, password: string) => Promise<boolean>
+  guestSignIn: () => Promise<boolean>
   signOut: () => void;
 }
 
@@ -39,17 +41,19 @@ export const useAuthStore = create<AuthStore>()(
     (set, get) => ({
       // 初期値
       user: null,
-      isLoggedIn: false, 
-      loading: false, 
-      error: null, 
+      isLoggedIn: false,
+      loading: false,
+      error: null,
       authTokens: null,
-      
+      hasHydrated: false,
+
       // アクション            　user, はuser: userの省略記法
       setUser: (user) => set({ user, isLoggedIn: !!user }),
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),
       setAuthTokens: (authTokens) => set({ authTokens }),
-      
+      setHasHydrated: (hasHydrated) => set({ hasHydrated }),
+
       signOut: () => set({ user: null, isLoggedIn: false, error: null, authTokens: null }),
       signUp: async (name: string, email: string, password: string) => {
         const { setUser, setLoading, setError, setAuthTokens } = get()
@@ -147,7 +151,7 @@ export const useAuthStore = create<AuthStore>()(
           //取得したuserをcamelcaseに変換
           const camelCasedUser = camelcaseKeys(userInfo, { deep: true });
 
-          setUser(camelCasedUser);      
+          setUser(camelCasedUser);
           setLoading(false);
           return true;
         } catch (error) {
@@ -166,8 +170,11 @@ export const useAuthStore = create<AuthStore>()(
       partialize: (state) => ({
         user: state.user,
         isLoggedIn: state.isLoggedIn,
-        authTokens: state.authTokens, 
+        authTokens: state.authTokens,
       }),
+      onRehydrateStorage: () => (state) => {
+        state?.setHasHydrated(true);
+      },
     }
   )
 );

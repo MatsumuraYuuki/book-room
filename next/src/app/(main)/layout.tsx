@@ -1,11 +1,39 @@
 "use client"
 
-import { Navigation } from '@/components/common/Navigation';
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { usePathname } from 'next/navigation';
+import { useAuthStore } from '@/stores/authStore';
+import { Navigation } from '@/components/common/Navigation';
 
+// (main)以下はナビゲーションバーを無効化
+// readerページの場合一部レイアウトを変更
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
+  const user = useAuthStore((state) => state.user);
+  const hasHydrated = useAuthStore((state) => state.hasHydrated)
+  
+  const router = useRouter();
   const pathname = usePathname();
   const isReaderPage = pathname?.startsWith('/reader');  // readerページかどうか
+
+  // 認証していない場合サインインページに遷移する
+  useEffect(() => {
+    if (!hasHydrated) return;
+
+    if (!user) {
+      // サインアウト後は別のコンポーネントでリダイレクトするため、ここではトーストを表示しない
+      router.push('/auth/sign-in');
+    }
+  },[user, router, hasHydrated])
+  
+  if (!hasHydrated) {
+    return null;
+  }
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className={`min-h-screen ${!isReaderPage ? 'bg-white' : ''}`}>
       {/* readerページではNavigationを表示しない */}

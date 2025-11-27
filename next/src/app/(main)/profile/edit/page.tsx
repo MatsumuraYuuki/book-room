@@ -66,6 +66,11 @@ export default function ProfileEditPage() {
         toast.error('現在のパスワードを入力してください');
         return;
       }
+      // 現在のパスワードが入力されているのに、新しいパスワードが空の場合
+      if (data.currentPassword && !data.newPassword) {
+        toast.error('新しいパスワードを入力してください');
+        return;
+      }
 
       // パスワード確認チェック
       if (data.newPassword && data.newPassword !== data.confirmPassword) {

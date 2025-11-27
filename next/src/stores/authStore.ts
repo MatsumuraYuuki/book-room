@@ -37,7 +37,7 @@ interface AuthStore {
 export const useAuthStore = create<AuthStore>()(
   persist(
     (set, get) => ({
-      // 既存の実装をここに移動
+      // 初期値
       user: null,
       isLoggedIn: false, 
       loading: false, 

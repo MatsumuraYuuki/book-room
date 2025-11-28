@@ -36,6 +36,6 @@ class Api::V1::BookshelvesController < Api::V1::BaseController
   private
 
     def bookshelf_params
-      params.require(:bookshelf).permit(:aozora_book_id, :status)
+      params.require(:bookshelf).permit(:aozora_book_id, :status, :rating, :review)
     end
 end

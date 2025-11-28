@@ -97,7 +97,7 @@ create_table "bookshelves", charset: "utf8mb4" do |t|
   t.bigint "user_id", null: false
   t.references :aozora_book, null: false, foreign_key: true #「外部キー制約を自動で追加」
   t.integer "status", default: 0, null: false  # 0:未読, 1:読書中, 2:読了
-  t.integer "rating", default: 0, null: false  # 0:未評価, 1-5:星評価
+  t.integer "rating"  # null:未評価, 1-5:星評価
   t.text "review"                               # レビュー本文（任意）
   t.datetime "completed_at"                     # 読了日時
   t.datetime "created_at", null: false
@@ -118,7 +118,7 @@ enum :status, { unread: 0, reading: 1, completed: 2 }
 ```
 
 **評価・レビュー仕様:**
-- rating: 0（未評価）または1-5の星評価
+- rating: null（未評価）または1-5の星評価
 - review: テキスト（任意、空欄可）
 - 評価は削除不可、更新のみ可能
 - 星評価とレビューは独立して更新可能

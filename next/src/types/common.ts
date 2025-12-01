@@ -22,6 +22,8 @@ export interface Bookshelf {
   userId: number;
   aozoraBookId: number;
   status: "unread" | "reading" | "completed"
+  rating: number | null;
+  review: string | null;
   completedAt: string | null;
   aozoraBook: AozoraBook;
   createdAt: string;

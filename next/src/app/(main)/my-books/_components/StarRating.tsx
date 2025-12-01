@@ -1,7 +1,6 @@
 // my-books/_components/BookshelfModal.tsxで使用します。
 import { FaStar } from 'react-icons/fa';
 
-
 interface StarRatingProps {
   rating: number | null;
   onRatingChange: (rating: number) => void;

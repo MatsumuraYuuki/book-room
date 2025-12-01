@@ -34,7 +34,6 @@ export default function BookshelfModal({
     updateMutation.mutate({ rating })
   }
 
-
   // onSuccessで queryClient.invalidateQueries を呼ぶ
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -57,8 +56,8 @@ export default function BookshelfModal({
   const updateMutation = useMutation<
     Bookshelf,
     Error,
-    {status?: string, rating?: number, review?: string}
-    >({
+    { status?: string, rating?: number, review?: string }
+  >({
     mutationFn: async (params) => {
       const response = await api.patch(`/bookshelves/${bookshelf?.id}`, {
         bookshelf: params
@@ -109,7 +108,6 @@ export default function BookshelfModal({
       }
     }
   })
-
 
   if (!isOpen) return null;
 
@@ -167,7 +165,7 @@ export default function BookshelfModal({
               {statusOptions.map(option => (
                 <button
                   key={option.status}
-                  onClick={() => updateMutation.mutate({status: option.status})}
+                  onClick={() => updateMutation.mutate({ status: option.status })}
                   className="flex-1 py-2 px-3 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
                 >
                   {option.label}
@@ -184,7 +182,7 @@ export default function BookshelfModal({
             {/* 星評価 */}
             <StarRating
               rating={localRating}
-              onRatingChange={handleRatingChange}  
+              onRatingChange={handleRatingChange}
             />
 
             {/* レビュー */}

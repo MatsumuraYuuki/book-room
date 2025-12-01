@@ -178,7 +178,7 @@ export default function BookshelfModal({
           <hr className="border-gray-200" />
 
           {/* 読書評価エリア */}
-          <div>
+          <div className="space-y-2">
             {/* 星評価 */}
             <StarRating
               rating={localRating}

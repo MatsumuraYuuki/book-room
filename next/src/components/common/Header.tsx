@@ -2,6 +2,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter, usePathname } from 'next/navigation';
 
@@ -33,6 +34,12 @@ export const Header = () => {
             
             {/* ロゴ */}
             <div className="flex items-center">
+              <Image 
+                src="/images/logo.png" 
+                alt="Aozora Library" 
+                width={40} 
+                height={40}
+              />              
               <Link href="/" className="text-2xl font-bold text-blue-600 hover:text-blue-700">
                 青空本棚
               </Link>

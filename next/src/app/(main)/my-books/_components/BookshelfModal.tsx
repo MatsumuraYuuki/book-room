@@ -1,4 +1,6 @@
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from 'react';
+import StarRating from './StarRating';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import toast from "react-hot-toast";
@@ -19,6 +21,19 @@ export default function BookshelfModal({
   onClose
 }: BookshelfModalProps) {
 
+  const [localRating, setLocalRating] = useState(bookshelf?.rating ?? null)
+  const [reviewText, setReviewText] = useState(bookshelf?.review || '')
+
+  useEffect(() => {
+    setLocalRating(bookshelf?.rating ?? null)
+    setReviewText(bookshelf?.review || '')
+  }, [bookshelf])
+
+  const handleRatingChange = (rating: number) => {
+    setLocalRating(rating)  //  即座にUI更新
+    updateMutation.mutate({ rating })
+  }
+
   // onSuccessで queryClient.invalidateQueries を呼ぶ
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -37,25 +52,33 @@ export default function BookshelfModal({
     { status: "completed", label: "読了" }
   ]
 
-  // ステータス変更
-  const mutation = useMutation<Bookshelf, Error, string>({
-    mutationFn: async (status: string) => {
+  // ステータス・レーティング・レビュー更新
+  const updateMutation = useMutation<
+    Bookshelf,
+    Error,
+    { status?: string, rating?: number, review?: string }
+  >({
+    mutationFn: async (params) => {
       const response = await api.patch(`/bookshelves/${bookshelf?.id}`, {
-        bookshelf: {
-          status: status
-        }
+        bookshelf: params
       })
       return response.data;
     },
-    onSuccess: () => {
-      toast.success('ステータスを変更しました')
+    onSuccess: (data, variables) => {
+      // toast.success('ステータスを変更しました')
       queryClient.invalidateQueries({ queryKey: ['bookshelves'] })
-      onClose()
+      if (variables.review !== undefined) {
+        toast.success('レビューを保存しました')
+        onClose()
+      } else if (variables.status) {
+        toast.success('ステータスを変更しました')
+        onClose()
+      }
     },
     onError: (error) => {
       if (axios.isAxiosError(error) && error.response) {
         // サーバーからレスポンスがある場合 / AxiosErrorオブジェクト構造からエラー取り出す
-        const errorMessage = error.response.data.errors?.[0] || "ステータスの変更に失敗しました";
+        const errorMessage = error.response.data.errors?.[0] || "変更に失敗しました";
         toast.error(errorMessage)
       } else {
         // ネットワークエラーなど
@@ -142,13 +165,41 @@ export default function BookshelfModal({
               {statusOptions.map(option => (
                 <button
                   key={option.status}
-                  onClick={() => mutation.mutate(option.status)}
+                  onClick={() => updateMutation.mutate({ status: option.status })}
                   className="flex-1 py-2 px-3 text-sm border border-gray-300 rounded hover:bg-gray-50 transition-colors"
                 >
                   {option.label}
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* 区切り線 */}
+          <hr className="border-gray-200" />
+
+          {/* 読書評価エリア */}
+          <div className="space-y-2">
+            {/* 星評価 */}
+            <StarRating
+              rating={localRating}
+              onRatingChange={handleRatingChange}
+            />
+
+            {/* レビュー */}
+            <textarea
+              value={reviewText}
+              onChange={(e) => setReviewText(e.target.value)}
+              className="w-full border border-gray-300 rounded p-2 text-sm resize-none"
+              rows={4}
+              placeholder="レビューや感想をここに書く"
+            />
+            <button
+              onClick={() => updateMutation.mutate({ review: reviewText })}
+              disabled={updateMutation.isPending}
+              className="mx-auto block mt-2 w-48 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors disabled:bg-gray-400"
+            >
+              レビューを保存
+            </button>
           </div>
 
           {/* 区切り線 */}

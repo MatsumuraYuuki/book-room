@@ -41,10 +41,7 @@ jobs:
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-      - name: Bundlerとgemをインストール
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          working-directory: rails
       - name: データベース設定ファイルをコピー #ローカルのdatabase.yml.ciから VM内のdatabase.ymlへコピー
         run: cp config/database.yml.ci config/database.yml
       - name: データベースの状態確認 #MySQLサービスの起動完了を待っている
@@ -74,13 +71,10 @@ jobs:
       - name: コードをチェックアウト #Ubuntu VMがGitHubからコードをダウンロード
         uses: actions/checkout@v4
       - name: Set up Ruby #Ubuntu VMの中でRubyをインストールしてる
-        uses: ruby/setup-ruby@v1 
+        uses: ruby/setup-ruby@v1
         with:
           ruby-version: 3.2.2
           bundler-cache: true
-      - name: Bundlerとgemをインストール  #Ubuntu VMの中でRubyをインストールしてる
-        run: |
-          gem install bundler
-          bundle install --jobs 4 --retry 3 --path vendor/bundle
+          working-directory: rails
       - name: RuboCopを実行
         run: bundle exec rubocop

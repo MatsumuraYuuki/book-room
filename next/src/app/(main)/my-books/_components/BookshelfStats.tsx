@@ -1,4 +1,5 @@
-// 読書状況の型定義
+// 本棚ページにどれほど本が登録しているか表示させるコンポーネント
+
 interface BookshelfStatsProps {
   totalCount: number;
   unreadCount: number;
@@ -6,7 +7,6 @@ interface BookshelfStatsProps {
   completedCount: number;
 }
 
-// 統計情報
 export default function BookshelfStats({
   totalCount,
   unreadCount,

@@ -45,9 +45,7 @@
 - 本棚管理機能（一覧・削除・ステータス変更）
 - プロフィールダッシュボード機能（統計情報、読書中の本、最近読了した本）
 - ビューアー機能
-
-### ⬜ 未実装（フェーズ1 - これから実装）
-1. 星評価・レビュー機能
+- 星評価・レビュー機能
 
 ---
 
@@ -97,7 +95,7 @@ create_table "bookshelves", charset: "utf8mb4" do |t|
   t.bigint "user_id", null: false
   t.references :aozora_book, null: false, foreign_key: true #「外部キー制約を自動で追加」
   t.integer "status", default: 0, null: false  # 0:未読, 1:読書中, 2:読了
-  t.integer "rating", default: 0, null: false  # 0:未評価, 1-5:星評価
+  t.integer "rating"  # null:未評価, 1-5:星評価
   t.text "review"                               # レビュー本文（任意）
   t.datetime "completed_at"                     # 読了日時
   t.datetime "created_at", null: false
@@ -118,7 +116,7 @@ enum :status, { unread: 0, reading: 1, completed: 2 }
 ```
 
 **評価・レビュー仕様:**
-- rating: 0（未評価）または1-5の星評価
+- rating: null（未評価）または1-5の星評価
 - review: テキスト（任意、空欄可）
 - 評価は削除不可、更新のみ可能
 - 星評価とレビューは独立して更新可能
@@ -474,8 +472,4 @@ rails/
 13. ビューアー画面実装✅
 14. プロフィールAPI実装✅
 15. マイページ実装✅
-16. **星評価・レビュー機能実装（次のステップ）**
-    - マイグレーション（rating, review追加）
-    - モデルのバリデーション
-    - API更新（bookshelf_paramsにrating, review追加）
-    - フロントエンド：モーダルに星評価・レビュー欄追加
+16. 星評価・レビュー機能実装✅

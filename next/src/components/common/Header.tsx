@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore'
 import { useRouter, usePathname } from 'next/navigation';
+import { FiLogOut } from 'react-icons/fi';
 
 export const Header = () => {
   // 現在のページパスを取得
@@ -13,7 +14,7 @@ export const Header = () => {
   const isHomePage = pathname === '/';
 
   // 認証情報を取得
-  const { user, isLoggedIn, signOut } = useAuthStore();
+  const { isLoggedIn, signOut } = useAuthStore();
   const router = useRouter();
 
   // サインアウトボタンがクリックされた時の処理
@@ -68,18 +69,24 @@ export const Header = () => {
                   </>
                 )
               ) : (
-                // その他のページ：ユーザー情報とサインアウト
+                // サインアウトページ
                 isLoggedIn && (
                   <>
-                    <span className="text-sm text-gray-600">
-                      こんにちは、{user?.name}さん
-                    </span>
-                    <button
-                      onClick={handleSignOut}
-                      className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
-                    >
-                      サインアウト
-                    </button>
+                    <div className="relative group">
+                      <button
+                        onClick={handleSignOut}
+                        className="p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                        aria-label="ログアウト"
+                      >
+                        <FiLogOut size={20} />
+                      </button>
+                      {/* ツールチップ */}
+                      <div className="absolute right-0 top-full mt-2 px-3 py-1.5 bg-gray-800 text-white text-sm rounded whitespace-nowrap opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 pointer-events-none">
+                        ログアウトする
+                        {/* 三角形の矢印 */}
+                        <div className="absolute bottom-full right-4 border-4 border-transparent border-b-gray-800"></div>
+                      </div>
+                    </div>                  
                   </>
                 )
               )}

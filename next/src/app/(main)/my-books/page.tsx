@@ -7,9 +7,9 @@ import { useAuthStore } from '@/stores/authStore';
 import { api } from '@/lib/api'
 import { Bookshelf } from '@/types/common';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
-import BookshelfCard from '@/app/(main)/my-books/_components/BookshelfCard';
-import BookshelfStats from './_components/BookshelfStats';
-import BookshelfControls from './_components/BookshelfControls';
+import BookshelfCard from '@/components/features/bookshelf/BookshelfCard';
+import BookshelfStats from '@/components/features/bookshelf/BookshelfStats';
+import BookshelfControls from '@/components/features/bookshelf/BookshelfControls';
 import BookshelfModal from './_components/BookshelfModal';
 
 export default function BookshelfPage() {

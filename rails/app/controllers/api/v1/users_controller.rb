@@ -1,7 +1,7 @@
 class Api::V1::UsersController < ApplicationController
   def index
-    users = User.select(:id, :name, :image_url)
-    render json: users
+    users = User.all
+    render json: users, only: [:id, :name], methods: [:image_url]
   end
 
   def show

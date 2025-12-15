@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { api } from '@/lib/api';
 import { useAuthStore } from "@/stores/authStore";
 import { User } from '@/types/common';
+import LoadingSpinner from '@/components/common/LoadingSpinner';
 
 type Props = {
   params: { id: string }
@@ -41,7 +42,9 @@ export default function UserPage({ params }: Props) {
     fetchUser()
   }, [params.id]);
 
-  if (loading) return <div>読み込み中...</div>;
+  if (loading) {
+    return <LoadingSpinner message="検索中..." />
+  }
   if (!user) return notFound();
 
   return (

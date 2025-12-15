@@ -30,7 +30,7 @@ export default function BookshelfPage() {
   const { data: bookshelves = [], isLoading, isError } = useQuery<Bookshelf[]>({
     queryKey: ['bookshelves'],
     queryFn: async () => {
-      const response = await api.get("bookshelves");
+      const response = await api.get("/bookshelves");
       return response.data
     }
   });

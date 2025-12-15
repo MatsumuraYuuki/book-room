@@ -1,4 +1,10 @@
 class Api::V1::UsersController < ApplicationController
+
+  def index
+    users = User.select(:id, :name, :image_url)
+    render json: users
+  end
+
   def show
     # URL「users/1ああ」でもID1のページが表示されてしまうエラー対処。パラメータが数値のみかチェック
     unless params[:id].match?(/^\d+$/)

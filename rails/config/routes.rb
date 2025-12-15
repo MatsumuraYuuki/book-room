@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
-      resources :users, only: [:show]
+      resources :users, only: [:index, :show]
       resources :aozora_books, only: [:index] do
         member do
           get :content # GET /api/v1/aozora_books/:id/content

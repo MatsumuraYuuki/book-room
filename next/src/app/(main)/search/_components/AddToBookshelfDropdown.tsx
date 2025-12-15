@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from 'react'
 import toast from "react-hot-toast";
 import { BookmarkIcon } from '@heroicons/react/24/outline'
 import { api } from '@/lib/api'
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 
 interface AddToBookshelfDropdownProps {
@@ -27,6 +27,8 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
   const [isOpen, setIsOpen] = useState(false)
 
   const dropdownRef = useRef<HTMLDivElement>(null) //「メニュー外クリックで閉じる」処理
+
+  const queryClient = useQueryClient()
 
   const buttonOptions = [
     { status: 0, label: "未読として登録" },
@@ -55,6 +57,7 @@ export default function AddToBookshelfDropdown({ aozoraBookId }: AddToBookshelfD
       // ✅ 成功時の処理をここに書く
        console.log("✅ 登録に成功:", data);
        toast.success('本棚に追加しました')
+       queryClient.invalidateQueries({ queryKey: ['bookshelves'] })
     },
     onError: (error) => {
       // ❌ エラー時の処理をここに書く

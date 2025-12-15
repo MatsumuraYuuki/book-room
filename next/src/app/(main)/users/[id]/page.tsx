@@ -1,12 +1,10 @@
 'use client';
 
 import { useState, useEffect } from "react";
-import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api';
-import { useAuthStore } from "@/stores/authStore";
 import { User, Bookshelf } from '@/types/common';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import BookshelfCard from '@/components/features/bookshelf/BookshelfCard';
@@ -18,7 +16,6 @@ type Props = {
 }
 
 export default function UserPage({ params }: Props) {
-  const { user: currentUser, isLoggedIn } = useAuthStore()
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
 
@@ -34,8 +31,6 @@ export default function UserPage({ params }: Props) {
       notFound(); // 404ページにリダイレクト
     }
   }, [params.id]);
-
-  const isOwnProfile = isLoggedIn && currentUser?.id === parseInt(params.id);
 
   // ユーザー情報を取得
   useEffect(() => {
@@ -106,15 +101,6 @@ export default function UserPage({ params }: Props) {
           />
           <div className='flex-1'>
             <h2 className='text-2xl font-bold mb-2'>{user.name}の本棚</h2>
-
-            {isOwnProfile && (
-              <Link
-                href="/profile/edit"
-                className="mb-3 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
-              >
-                プロフィール編集
-              </Link>
-            )}
 
             {/* 統計情報表示(横並び) */}
             {isBookshelfLoading ? (

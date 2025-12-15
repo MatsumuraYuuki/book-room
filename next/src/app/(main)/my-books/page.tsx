@@ -69,14 +69,6 @@ export default function BookshelfPage() {
 
   return (
     <div className='container mx-auto px-2 py-4'>
-      {/* 本棚登録数が0の時 */}
-      {bookshelves && bookshelves.length === 0 && (
-        <div className="text-center py-8 text-gray-600">
-          <p>まだ本棚に本がありません</p>
-          <p className="text-sm mt-2">検索ページから本を登録しましょう！</p>
-        </div>
-      )}
-
       {/* ユーザー情報・統計の表示 */}
       <div className='mb-6 bg-white shadow rounded-lg p-6'>
         <div className='flex items-start gap-6'>
@@ -109,6 +101,14 @@ export default function BookshelfPage() {
         onStatusChange={setSelectedStatus}
         onSortChange={setSelectedSort}
       />
+
+      {/* 本棚登録数が0の時 */}
+      {bookshelves && bookshelves.length === 0 && (
+        <div className="text-center py-8 text-gray-600">
+          <p>まだ本棚に本がありません</p>
+          <p className="text-sm mt-2">検索ページから本を登録しましょう！</p>
+        </div>
+      )}
 
       {/* 取得した本棚を表示 */}
       <div className='grid grid-cols-1  sm:grid-cols-2  md:grid-cols-2 lg:grid-cols-3 gap-4 xl:grid-cols-4'>

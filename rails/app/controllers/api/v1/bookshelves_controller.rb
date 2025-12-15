@@ -1,8 +1,14 @@
 class Api::V1::BookshelvesController < Api::V1::BaseController
-  before_action :authenticate_user! # 認証必須
+  before_action :authenticate_user!, except: [:index]
 
   def index
-    bookshelves = current_user.bookshelves.includes(:aozora_book)
+    if params[:user_id].present?
+      user = User.find(params[:user_id])
+      bookshelves = user.bookshelves.includes(:aozora_book)
+    else
+      bookshelves = current_user.bookshelves.includes(:aozora_book)
+    end
+
     bookshelves = bookshelves.where(status: params[:status]) if params[:status].present?
 
     render json: bookshelves, status: :ok

@@ -2,8 +2,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from '@/components/Header';
-import { AuthProvider } from '../contexts/AuthContext';
+import { Toaster } from "react-hot-toast";
+import { Header } from '@/components/common/Header';
+import { ReactQueryProvider } from '@/components/providers/react-query-provider';
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -17,7 +18,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "BookRoom",
+  title: "青空本棚",
   description: "記事共有アプリ",
 };
 
@@ -29,12 +30,13 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        {/* 全体をAuthProviderで囲み、ここにstateの状態を記憶しておくことでページ移動してもstateの再取得が可能になる */}
-        <AuthProvider>
+        <ReactQueryProvider>
           <Header />
           {children}
-        </AuthProvider>
+          <Toaster position="bottom-left" />
+        </ReactQueryProvider>
       </body>
     </html>
   );
 }
+      

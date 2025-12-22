@@ -4,16 +4,25 @@ Rails.application.routes.draw do
 
   namespace :api do
     namespace :v1 do
+      resources :users, only: [:index, :show]
+      resources :aozora_books, only: [:index] do
+        member do
+          get :content # GET /api/v1/aozora_books/:id/content
+        end
+      end
+      resources :bookshelves, only: [:index, :create, :update, :destroy]
+
+      namespace :current do
+        resource :user, only: [:show, :update], controller: "user"
+      end
       get "health_check", to: "health_check#index"
       mount_devise_token_auth_for "User", at: "auth", controllers: {
         registrations: "api/v1/auth/registrations",
       }
-      namespace :current do
-        resource :user, only: [:show]
-        resources :articles, only: [:index, :show, :create, :update]
-      end
-
-      resources :articles, only: [:index, :show]
     end
+  end
+
+  devise_scope :api_v1_user do
+    post "api/v1/auth/guest_sign_in", to: "api/v1/auth/sessions#guest_sign_in"
   end
 end

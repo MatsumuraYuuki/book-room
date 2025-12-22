@@ -5,7 +5,7 @@ import { useAuthStore } from '../stores/authStore';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000/api/v1';
 
-//  使う時 : await api.METHODS(第一引数: URL, 第二引数: 送信するデータ, 第三引数: 設定(config));
+// 使う時：await api.METHODS(第一引数: URL, 第二引数: 送信するデータ, 第三引数: 設定(config));
 export const api = axios.create({
   baseURL: BASE_URL,
   headers: {

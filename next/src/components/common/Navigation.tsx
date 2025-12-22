@@ -3,9 +3,10 @@
 
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { 
+import {
   MagnifyingGlassIcon,  // 本を探す用
   UserIcon,  //ユーザー用
+  UsersIcon,  // ユーザー一覧用
   Squares2X2Icon  // 本棚用
 } from '@heroicons/react/24/outline';
 
@@ -21,6 +22,7 @@ const navItems: NavItem[] = [
   { name: 'プロフィール', href: '/profile', icon: UserIcon },
   { name: '本を探す', href: '/search', icon: MagnifyingGlassIcon },
   { name: '本棚', href: '/my-books', icon: Squares2X2Icon },
+  { name: 'ユーザー', href: '/users', icon: UsersIcon },
 ];
 
 export function Navigation() {

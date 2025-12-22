@@ -4,10 +4,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore'
+  import { useQueryClient } from '@tanstack/react-query'
 import { useRouter, usePathname } from 'next/navigation';
 import { FiLogOut } from 'react-icons/fi';
 
 export const Header = () => {
+  const queryClient = useQueryClient()
+
   // 現在のページパスを取得
   const pathname = usePathname();
   const isReaderPage = pathname?.startsWith('/reader');
@@ -19,6 +22,7 @@ export const Header = () => {
 
   // サインアウトボタンがクリックされた時の処理
   const handleSignOut = () => {
+    queryClient.clear()  // ← React Queryのキャッシュをクリア
     signOut();
     router.push('/');
   };

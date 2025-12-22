@@ -16,13 +16,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   const pathname = usePathname();
   const isReaderPage = pathname?.startsWith('/reader');  // readerページかどうか
 
-  // 認証していない場合サインインページに遷移する
+  // 認証していない場合ホームページに遷移する
   useEffect(() => {
     if (!hasHydrated) return;
 
     if (!user) {
-      // サインアウト後は別のコンポーネントでリダイレクトするため、ここではトーストを表示しない
-      router.push('/auth/sign-in');
+      // ログアウト時はホームページにリダイレクト
+      router.push('/');
     }
   },[user, router, hasHydrated])
   

@@ -12,7 +12,7 @@ interface AuthTokens {
 
 // 認証コンテキストの型定義
 interface AuthStore {
-  // 状態  
+  // 状態
   user: User | null;
   isLoggedIn: boolean;
   loading: boolean;
@@ -25,7 +25,7 @@ interface AuthStore {
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setAuthTokens: (authTokens: AuthTokens | null) => void;
-  setHasHydrated: (hasHydrated: boolean) => void
+  setHasHydrated: (hasHydrated: boolean) => void;
 
   signUp: (name: string, email: string, password: string) => Promise<boolean>
   signIn: (email: string, password: string) => Promise<boolean>

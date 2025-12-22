@@ -11,7 +11,7 @@ import { Navigation } from '@/components/common/Navigation';
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   const user = useAuthStore((state) => state.user);
   const hasHydrated = useAuthStore((state) => state.hasHydrated)
-  
+
   const router = useRouter();
   const pathname = usePathname();
   const isReaderPage = pathname?.startsWith('/reader');  // readerページかどうか
@@ -24,8 +24,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       // ログアウト時はホームページにリダイレクト
       router.push('/');
     }
-  },[user, router, hasHydrated])
-  
+  }, [user, router, hasHydrated])
+
   if (!hasHydrated) {
     return null;
   }

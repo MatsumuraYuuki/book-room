@@ -4,7 +4,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useAuthStore } from '@/stores/authStore'
-  import { useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useRouter, usePathname } from 'next/navigation';
 import { FiLogOut } from 'react-icons/fi';
 
@@ -37,13 +37,13 @@ export const Header = () => {
       <header className="fixed top-0 left-0 right-0 z-[60] bg-white shadow-sm border-b border-gray-200">
         <div className="px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            
+
             {/* 左側：ロゴ */}
             <Link href="/" className="flex items-center gap-3 hover:opacity-90 transition-opacity">
-              <Image 
-                src="/images/logo.png" 
-                alt="Aozora Library" 
-                width={40} 
+              <Image
+                src="/images/logo.png"
+                alt="Aozora Library"
+                width={40}
                 height={40}
               />
               <div className="h-8 w-px bg-gray-300"></div>
@@ -90,7 +90,7 @@ export const Header = () => {
                         {/* 三角形の矢印 */}
                         <div className="absolute bottom-full right-4 border-4 border-transparent border-b-gray-800"></div>
                       </div>
-                    </div>                  
+                    </div>
                   </>
                 )
               )}

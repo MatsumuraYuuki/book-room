@@ -1,3 +1,6 @@
+# 本番環境ではスキップ（ゲストログイン機能でユーザー作成するため）
+return if Rails.env.production?
+
 ActiveRecord::Base.transaction do
   User.create!(
     name: "テスト太郎",

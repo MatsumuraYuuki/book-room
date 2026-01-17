@@ -1,4 +1,3 @@
 # この値は、Settings.front_domainという形で取り出すことができます。
 # 本番環境のフロントエンドドメインを設定してください。
-front_domain:
-  - <%= ENV.fetch("FRONT_DOMAIN", "https://your-frontend-domain.com") %>
+front_domain: "https://aozora-library.com"

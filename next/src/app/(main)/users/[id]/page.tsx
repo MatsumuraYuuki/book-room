@@ -92,7 +92,7 @@ export default function UserPage({ params }: Props) {
       <div className='mb-6 bg-white shadow rounded-lg p-6'>
         <div className='flex items-start gap-6'>
           <Image
-            src={user.imageUrl || "/default-avatar.png"}
+            src={user.imageUrl || "/images/default-avatar.png"}
             alt={user.name || "ユーザー"}
             className='w-24 h-24 rounded-full object-cover'
             width={96}

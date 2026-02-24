@@ -147,7 +147,7 @@ export default function ProfileEditPage() {
               <p className="text-sm text-gray-600 mb-2">現在の画像</p>
               <Image
                 className="w-24 h-24 object-cover rounded-full"
-                src={user?.imageUrl || "/default-avatar.png"}
+                src={user?.imageUrl || "/images/default-avatar.png"}
                 alt="現在のプロフィール画像"
                 width={96}
                 height={96}

@@ -65,7 +65,7 @@ export default function ProfilePage() {
           <div className="flex items-center gap-6">
               <Image
                 className="w-24 h-24 object-cover rounded-full"
-                src={user?.imageUrl || "/default-avatar.png"}
+                src={user?.imageUrl || "/images/default-avatar.png"}
                 alt={user.name || "ユーザー"}
                 width={96}
                 height={96}

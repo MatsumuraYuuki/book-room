@@ -1,0 +1,66 @@
+# CIチェックが通ること確認した上で、Rails, Next を自動デプロイ
+name: Deploy to ECS
+
+# 当 workflow 実行タイミング
+# main ブランチにコード差分が push されたときのみ
+# フロントエンドの変更では実行しないようにpathsを追加
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'rails/**'
+      - 'nginx/**'
+      - '.github/workflows/deploy.yml'
+
+# 当 workflow 内で使用できる変数を定義
+# $AWS_REGION のような形で参照可能
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_RAILS_REPOSITORY: aozora-library-rails
+  ECR_NGINX_REPOSITORY: aozora-library-nginx
+  ECS_CLUSTER: aozora-library-cluster
+  ECS_SERVICE: aozora-library-backend-service
+
+# 当 workflow が行う処理
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v4
+
+      - name: AWS認証
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: ECRログイン
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Railsイメージ ビルド & プッシュ
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_RAILS_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_RAILS_REPOSITORY:$IMAGE_TAG -f rails/Dockerfile.prod rails/
+          docker push $ECR_REGISTRY/$ECR_RAILS_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_RAILS_REPOSITORY:$IMAGE_TAG
+
+      - name: nginxイメージ ビルド & プッシュ
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_NGINX_REPOSITORY:latest -t $ECR_REGISTRY/$ECR_NGINX_REPOSITORY:$IMAGE_TAG -f nginx/Dockerfile.prod nginx/
+          docker push $ECR_REGISTRY/$ECR_NGINX_REPOSITORY:latest
+          docker push $ECR_REGISTRY/$ECR_NGINX_REPOSITORY:$IMAGE_TAG
+
+      - name: ECSサービスを更新
+        run: |
+          aws ecs update-service --cluster $ECS_CLUSTER --service $ECS_SERVICE --force-new-deployment

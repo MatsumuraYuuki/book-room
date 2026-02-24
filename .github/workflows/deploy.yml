@@ -20,7 +20,7 @@ env:
   ECR_RAILS_REPOSITORY: aozora-library-rails
   ECR_NGINX_REPOSITORY: aozora-library-nginx
   ECS_CLUSTER: aozora-library-cluster
-  ECS_SERVICE: aozora-library-backend-service
+  ECS_SERVICE: aozora-library-task-definition-backend-service
 
 # 当 workflow が行う処理
 jobs:

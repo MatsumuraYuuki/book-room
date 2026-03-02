@@ -1,4 +1,4 @@
 # aozora-library
-## ER Diagram
+## ER図
 
-![ER図](docs/er_diagram.png)
+![ER図](docs/aozora-library.drawio.svg)

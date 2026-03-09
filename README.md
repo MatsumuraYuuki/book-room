@@ -91,23 +91,40 @@
 
 ## 使用技術
 
-### フロントエンド
 
-| 技術 | バージョン |
-| --- | --- |
-|  |  |
+| フロントエンド |
+| --- |
+| React 18 |
+| Next.js 14.2.30 |
+| TypeScript 5.3.3 |
+| Axios(バックエンドとの非同期通信) |
+| TanStack Query(データフェッチ・キャッシュ管理) |
+| React Hook Form(フォーム管理) |
+| Zustand(状態管理) |
+| Tailwind CSS |
+| Recharts(グラフ描画) |
+| ESLint / Prettier(静的解析、フォーマッター) |
 
-### バックエンド
 
-| 技術 | バージョン |
-| --- | --- |
-|  |  |
 
-### インフラ
+| バックエンド |
+| --- |
+| Ruby 3.2.2 |
+| Ruby on Rails 7.2.2.1 |
+| MySQL 8.0.36 |
+| Puma(AP サーバー) |
+| Nginx(Web サーバー) |
+| RuboCop(静的解析、フォーマッター) |
+| RSpec(自動テスト) |
 
-| 技術 | 用途 |
-| --- | --- |
-|  |  |
+
+
+| インフラ |
+| --- |
+| Docker / Docker Compose |
+| AWS（ECS on Fargate, ECR, RDS, ElastiCache, CloudFront, Route53, VPC, ACM） |
+| Vercel(フロントエンドホスティング) |
+| GitHub Actions(CI/CDパイプラインの構築) |
 
 ---
 

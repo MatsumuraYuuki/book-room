@@ -37,7 +37,7 @@
 
 タイトルまたは著者名で検索し、読みたい本のステータス（未読・読書中・読了）を選択して本棚に追加します。
 
-![検索デモ](docs/images/seargh_demo.gif)
+![検索デモ](docs/images/search_demo.gif)
 
 ### STEP 2. 本棚を管理しながら読む
 

@@ -367,7 +367,7 @@ GEM
     ruby-vips (2.3.0)
       ffi (~> 1.12)
       logger
-    rubyzip (3.2.1)
+    rubyzip (3.2.2)
     securerandom (0.4.1)
     stringio (3.1.7)
     thor (1.4.0)

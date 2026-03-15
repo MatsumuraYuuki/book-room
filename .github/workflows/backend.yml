@@ -1,5 +1,5 @@
-# テスト(rspec)、コードルール(rubocop)のチェックを行う
-name: Run RSpec and RuboCop
+# テスト(rspec)、コードルール(rubocop)、セキュリティ(brakeman)のチェックを行う
+name: Run RSpec, RuboCop and Brakeman
 # いつ実行するか
 # feature と develop ブランチへの push 時
 on:
@@ -78,3 +78,22 @@ jobs:
           working-directory: rails
       - name: RuboCopを実行
         run: bundle exec rubocop
+
+  # 処理③ brakeman でセキュリティ脆弱性をチェック
+  brakeman:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: rails
+    steps:
+      - name: コードをチェックアウト
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.2
+          bundler-cache: true
+          working-directory: rails
+      - name: Brakemanを実行
+        run: bin/brakeman --no-pager

@@ -1,6 +1,8 @@
 # Aozora Library
 
-**URL: https://aozora-library.com**
+**アプリケーションURL: https://aozora-library.com**
+
+**Qiitaアカウント: https://qiita.com/yuuuki11259**
 
 ## 目次
 

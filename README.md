@@ -133,7 +133,7 @@
 | インフラ |
 | --- |
 | Docker / Docker Compose |
-| AWS（ECS on Fargate, ECR, RDS, ElastiCache, CloudFront, Route53, VPC, ACM） |
+| AWS（ECS on Fargate, ECR, RDS, CloudFront, Route53, VPC, ACM） |
 | Vercel(フロントエンドホスティング) |
 | GitHub Actions(CI/CDパイプラインの構築) |
 

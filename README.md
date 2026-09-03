@@ -1,8 +1,7 @@
 # Aozora Library
  
 **アプリケーションURL: https://aozora-library.com**
-
-**Qiitaアカウント: https://qiita.com/yuuuki11259**
+(現在停止中)
 
 ## 目次
 
